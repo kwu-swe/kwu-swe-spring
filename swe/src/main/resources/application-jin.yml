@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: jin
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/kwu?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true

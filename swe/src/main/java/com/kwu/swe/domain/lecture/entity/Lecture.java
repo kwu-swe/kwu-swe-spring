@@ -17,4 +17,8 @@ public class Lecture {
     private Long id;
 
     private int sizeLimit;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lecture_status", nullable = false)
+    private LectureStatus lectureStatus;
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class Lecture {
     private Long id;
 
     private int sizeLimit;
+
+    private Year year;
 
     //강의 전, 강의 중, 강의 후
     //학점 부여를 위한 status

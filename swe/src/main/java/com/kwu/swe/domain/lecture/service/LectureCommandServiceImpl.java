@@ -30,6 +30,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .lectureStatus()
                 .semester()
                 .sizeLimit()
+                .year()
 //                .course()
 //                .professor()
                 .build();

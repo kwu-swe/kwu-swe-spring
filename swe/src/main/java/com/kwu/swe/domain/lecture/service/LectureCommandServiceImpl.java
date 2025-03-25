@@ -1,8 +1,11 @@
 package com.kwu.swe.domain.lecture.service;
 
+import com.kwu.swe.domain.lecture.dto.request.RegisterLectureRequestDto;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.entity.LectureStatus;
+import com.kwu.swe.domain.lecture.entity.Semester;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
+import com.kwu.swe.global.util.EnumConvertUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +25,15 @@ public class LectureCommandServiceImpl implements LectureCommandService{
      * @return
      */
     @Override
-    public Long registerLecture() {
+    public Long registerLecture(RegisterLectureRequestDto dto) {
         //lecture professor 조회
         //lecture course 조회
         //lecture entity 생성
         Lecture newLecture = Lecture.builder()
-                .lectureStatus()
-                .semester()
-                .sizeLimit()
-                .year()
+                .lectureStatus(EnumConvertUtil.convert(LectureStatus.class, dto.getLectureStatus()))
+                .semester(EnumConvertUtil.convert(Semester.class, dto.getSemester()))
+                .sizeLimit(dto.getSizeLimit())
+                .year(dto.getYear())
 //                .course()
 //                .professor()
                 .build();

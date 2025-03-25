@@ -28,4 +28,8 @@ public class LectureSchedule {
     @JoinColumn(name = "lecture_id")
     private Lecture lecture;
 
+    public void linkInList(Lecture lecture) {
+        lecture.getLectureScheduleList().add(this);
+    }
+
 }

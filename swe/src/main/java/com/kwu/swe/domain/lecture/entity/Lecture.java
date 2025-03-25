@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -30,8 +33,17 @@ public class Lecture {
     @Column(name = "semester", nullable = false, length = 50)
     private Semester semester;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
+
+    //강의 교수 등록
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "professor_id")
+//    private User professor;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<LectureSchedule> lectureScheduleList = new ArrayList<>();
+
 }

@@ -23,4 +23,9 @@ public class LectureSchedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_location_id")
     private LectureLocation lectureLocation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id")
+    private Lecture lecture;
+
 }

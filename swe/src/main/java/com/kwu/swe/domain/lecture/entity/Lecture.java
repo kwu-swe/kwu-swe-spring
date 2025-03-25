@@ -30,10 +30,6 @@ public class Lecture {
     @Column(name = "semester", nullable = false, length = 50)
     private Semester semester;
 
-    //해당 강의의 스케줄 및 장소를 여러개 정할 수 있음
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_schedule_id")
-    private LectureSchedule lectureSchedule;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")

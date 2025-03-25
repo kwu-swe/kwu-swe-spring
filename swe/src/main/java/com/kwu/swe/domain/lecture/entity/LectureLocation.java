@@ -15,7 +15,8 @@ public class LectureLocation {
     @Column(name = "lecture_location_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "location", nullable = false, length = 50)
-    private Location location;
+    @Column(name = "location", nullable = false, unique = true)
+    private String location;
+
+    private int sizeLimit;
 }

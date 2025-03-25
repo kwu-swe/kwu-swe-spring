@@ -20,5 +20,5 @@ public class RegisterLectureRequestDto {
     private String lectureStatus;
 
     @Builder.Default
-    private Map<String,String> lectureTimeAndLocation = new HashMap<>();
+    private Map<Long,String> lectureLocationAndTime = new HashMap<>();
 }

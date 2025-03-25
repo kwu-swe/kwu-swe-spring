@@ -15,9 +15,9 @@ public class LectureSchedule {
     @Column(name = "lecture_schedule_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_period_id")
-    private LecturePeriod lecturePeriod;
+    @Enumerated
+    @Column(name = "class_time", nullable = false)
+    private ClassTime classTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_location_id")

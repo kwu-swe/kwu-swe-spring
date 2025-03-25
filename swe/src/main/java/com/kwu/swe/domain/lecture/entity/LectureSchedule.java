@@ -15,6 +15,7 @@ public class LectureSchedule {
     @Column(name = "lecture_schedule_id")
     private Long id;
 
+    //테이블 대신 이넘 연결
     @Enumerated
     @Column(name = "class_time", nullable = false)
     private ClassTime classTime;

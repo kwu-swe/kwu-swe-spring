@@ -1,5 +1,7 @@
-package com.kwu.swe.domain.lecture.entity;
+package com.kwu.swe.domain.lecture_schedule.entity;
 
+import com.kwu.swe.domain.lecture.entity.Lecture;
+import com.kwu.swe.domain.lecture_location.entity.LectureLocation;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,4 +25,13 @@ public class LectureSchedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_location_id")
     private LectureLocation lectureLocation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id")
+    private Lecture lecture;
+
+    public void linkInList(Lecture lecture) {
+        lecture.getLectureScheduleList().add(this);
+    }
+
 }

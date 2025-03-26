@@ -1,9 +1,13 @@
 package com.kwu.swe.domain.lecture.entity;
 
 import com.kwu.swe.domain.course.entity.Course;
+import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +23,8 @@ public class Lecture {
 
     private int sizeLimit;
 
+    private Year year;
+
     //강의 전, 강의 중, 강의 후
     //학점 부여를 위한 status
     @Enumerated(EnumType.STRING)
@@ -30,12 +36,17 @@ public class Lecture {
     @Column(name = "semester", nullable = false, length = 50)
     private Semester semester;
 
-    //해당 강의의 스케줄 및 장소를 여러개 정할 수 있음
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_schedule_id")
-    private LectureSchedule lectureSchedule;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
+
+    //강의 교수 등록
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "professor_id")
+//    private User professor;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<LectureSchedule> lectureScheduleList = new ArrayList<>();
+
 }

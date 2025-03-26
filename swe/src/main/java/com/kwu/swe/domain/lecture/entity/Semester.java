@@ -1,11 +1,12 @@
 package com.kwu.swe.domain.lecture.entity;
 
+import com.kwu.swe.global.interfaces.KeyedEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Semester {
+public enum Semester implements KeyedEnum {
 
     FIRST_SEMESTER("1학기"),
     SECOND_SEMESTER("2학기"),

@@ -1,11 +1,12 @@
-package com.kwu.swe.domain.lecture.entity;
+package com.kwu.swe.domain.lecture_schedule.entity;
 
+import com.kwu.swe.global.interfaces.KeyedEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ClassTime {
+public enum ClassTime implements KeyedEnum {
     MON_1("월요일 1교시"),
     MON_2("월요일 2교시"),
     MON_3("월요일 3교시"),

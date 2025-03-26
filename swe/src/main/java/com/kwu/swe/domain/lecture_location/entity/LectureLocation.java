@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.lecture.entity;
+package com.kwu.swe.domain.lecture_location.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

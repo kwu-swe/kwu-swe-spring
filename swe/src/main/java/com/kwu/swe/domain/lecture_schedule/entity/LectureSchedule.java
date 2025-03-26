@@ -1,5 +1,7 @@
-package com.kwu.swe.domain.lecture.entity;
+package com.kwu.swe.domain.lecture_schedule.entity;
 
+import com.kwu.swe.domain.lecture.entity.Lecture;
+import com.kwu.swe.domain.lecture_location.entity.LectureLocation;
 import jakarta.persistence.*;
 import lombok.*;
 

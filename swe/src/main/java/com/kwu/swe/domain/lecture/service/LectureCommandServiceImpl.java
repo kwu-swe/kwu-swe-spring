@@ -4,16 +4,15 @@ import com.kwu.swe.domain.course.entity.Course;
 import com.kwu.swe.domain.course.repository.CourseRepository;
 import com.kwu.swe.domain.lecture.dto.request.RegisterLectureRequestDto;
 import com.kwu.swe.domain.lecture.entity.*;
-import com.kwu.swe.domain.lecture.repository.LectureLocationRepository;
+import com.kwu.swe.domain.lecture_location.repository.LectureLocationRepository;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
-import com.kwu.swe.domain.lecture.repository.LectureScheduleRepository;
+import com.kwu.swe.domain.lecture_schedule.entity.ClassTime;
+import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Service

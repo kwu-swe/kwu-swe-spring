@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.lecture.entity;
+package com.kwu.swe.domain.lecture_schedule.entity;
 
 import com.kwu.swe.global.interfaces.KeyedEnum;
 import lombok.Getter;

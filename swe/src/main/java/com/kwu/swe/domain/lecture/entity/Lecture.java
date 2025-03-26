@@ -1,9 +1,9 @@
 package com.kwu.swe.domain.lecture.entity;
 
 import com.kwu.swe.domain.course.entity.Course;
+import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.Year;
 import java.util.ArrayList;

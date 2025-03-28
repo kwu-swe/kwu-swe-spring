@@ -1,5 +1,6 @@
 package com.kwu.swe.domain.submission.entity;
 
+import com.kwu.swe.domain.assignment.entity.Assignment;
 import jakarta.persistence.*;
 import lombok.*;
 

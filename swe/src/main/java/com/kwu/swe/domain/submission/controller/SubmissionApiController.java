@@ -2,12 +2,16 @@ package com.kwu.swe.domain.submission.controller;
 
 import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
+import com.kwu.swe.domain.submission.service.SubmissionFileService; // 추가
 import com.kwu.swe.domain.submission.service.SubmissionQueryService;
 import com.kwu.swe.domain.submission.dto.SubmissionDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,6 +21,7 @@ public class SubmissionApiController {
 
     private final SubmissionCommandService submissionCommandService;
     private final SubmissionQueryService submissionQueryService;
+    private final SubmissionFileService submissionFileService;  // 추가
 
     // 과제 제출 생성
     @PostMapping
@@ -47,5 +52,21 @@ public class SubmissionApiController {
                 .getSubmissionByAssignmentIdAndStudentId(assignmentId, studentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // ✅ 파일 업로드
+    @PostMapping("/{submissionId}/file")
+    public ResponseEntity<String> uploadFile(@PathVariable Long submissionId, @RequestParam("file") MultipartFile file) {
+        submissionCommandService.uploadSubmissionFile(submissionId, file);
+        return ResponseEntity.status(201).body("파일이 업로드되었습니다.");
+    }
+
+    // ✅ 파일 다운로드
+    @GetMapping("/{submissionId}/file")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long submissionId) {
+        byte[] fileData = submissionFileService.downloadFile(submissionId);  // Service에서 파일 다운로드 처리
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "submissionFile") // 파일 이름 추가
+                .body(fileData);  // 바이트 데이터 반환
     }
 }

@@ -4,11 +4,15 @@ import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.submission.dto.SubmissionDto;
 import com.kwu.swe.domain.submission.entity.Submission;
+import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import com.kwu.swe.domain.submission.entity.SubmissionStatus;
 import com.kwu.swe.domain.submission.repository.SubmissionRepository;
+import com.kwu.swe.domain.submission.repository.SubmissionFileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -16,7 +20,8 @@ import java.time.LocalDateTime;
 public class SubmissionCommandServiceImpl implements SubmissionCommandService {
 
     private final SubmissionRepository submissionRepository;
-    private final AssignmentRepository assignmentRepository;  // Assignment 레포지토리 추가
+    private final AssignmentRepository assignmentRepository;
+    private final SubmissionFileRepository submissionFileRepository;  // SubmissionFileRepository 추가
 
     @Override
     public void createSubmission(SubmissionDto submissionDto) {
@@ -32,5 +37,26 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
                 .build();
 
         submissionRepository.save(submission);
+    }
+
+    @Override
+    public void uploadSubmissionFile(Long submissionId, MultipartFile file) {
+        // 제출이 존재하는지 확인
+        Submission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 제출이 존재하지 않습니다."));
+
+        // 파일을 SubmissionFile 객체로 변환
+        try {
+            SubmissionFile submissionFile = SubmissionFile.builder()
+                    .submission(submission)
+                    .fileName(file.getOriginalFilename())
+                    .fileData(file.getBytes())
+                    .build();
+
+            // 파일 저장
+            submissionFileRepository.save(submissionFile);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
+        }
     }
 }

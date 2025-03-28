@@ -21,4 +21,8 @@ public class SubmissionFile {
 
     @Column(name = "file_name", nullable = false, length = 255)
     private String fileName;
+
+    @Lob
+    @Column(name = "file_data", nullable = false)
+    private byte[] fileData; // 파일 데이터 저장
 }

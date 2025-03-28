@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/submissions
+Content-Type: application/json
+
+{
+  "assignmentId": 1,
+  "studentId": 1234,
+  "status": "submitted"
+}

@@ -59,4 +59,14 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
             throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
         }
     }
+
+    @Override
+    public void deleteSubmissionFile(Long submissionId) {
+        // 제출이 존재하는지 확인
+        SubmissionFile submissionFile = submissionFileRepository.findBySubmissionId(submissionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 제출의 파일이 존재하지 않습니다."));
+
+        // 파일 삭제
+        submissionFileRepository.delete(submissionFile);
+    }
 }

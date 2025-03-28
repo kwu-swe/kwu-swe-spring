@@ -69,4 +69,12 @@ public class SubmissionApiController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "submissionFile") // 파일 이름 추가
                 .body(fileData);  // 바이트 데이터 반환
     }
+
+    // 파일 삭제
+    @DeleteMapping("/{submissionId}/file")
+    public ResponseEntity<String> deleteFile(@PathVariable Long submissionId) {
+        submissionCommandService.deleteSubmissionFile(submissionId);
+        return ResponseEntity.ok("파일이 삭제되었습니다.");
+    }
+
 }

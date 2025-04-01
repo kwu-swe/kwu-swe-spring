@@ -26,9 +26,7 @@ jobs:
       # 환경 변수 설정
       - name: Set environment values
         run: |
-          cd ./swe/src/main/resources
-          touch ./env.properties
-          echo "${{ secrets.ENV }}" > ./swe/env.properties
+          printf "%s" "${{ secrets.ENV }}" > ./swe/src/main/resources/env.properties
           shell: bash
 
       # Gradle build (Test 제외)

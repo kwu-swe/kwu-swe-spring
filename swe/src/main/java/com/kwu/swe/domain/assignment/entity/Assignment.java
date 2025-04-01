@@ -1,5 +1,6 @@
 package com.kwu.swe.domain.assignment.entity;
 
+import com.kwu.swe.domain.assignment.dto.AssignmentDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,14 +18,42 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @ManyToOne(fetch = FetchType.LAZY)  // lecture와 N:1 관계
+//    @JoinColumn(name = "lecture_id", nullable = false)
+//    private Lecture lecture;
+
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "due_date", nullable = false)
-    private LocalDateTime dueDate;  // 제출 기한 추가
+    @Column(name = "content", nullable = false)
+    private String content;
 
-    // 기한이 지나지 않았는지 확인하는 메서드
-    public boolean isSubmittedOnTime(LocalDateTime submittedAt) {
-        return !submittedAt.isAfter(dueDate);  // 제출 시간이 기한 이후인지 체크
+    @Column(name = "due_date", nullable = false)
+    private LocalDateTime dueDate;
+
+    @Column(name = "extended_due_date")
+    private LocalDateTime extendedDueDate;  // 연장된 제출 기한
+
+    @Column(name = "allow_submission", nullable = false)
+    private boolean allowSubmission;  // 제출 여부
+
+    @Column(name = "is_public", nullable = false)
+    private boolean isPublic;  // 과제 공개 여부
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    // 과제 생성 시 필요한 메서드
+    public void updateAssignment(String title, String content, LocalDateTime dueDate,
+                                 LocalDateTime extendedDueDate, boolean allowSubmission, boolean isPublic) {
+        this.title = title;
+        this.content = content;
+        this.dueDate = dueDate;
+        this.extendedDueDate = extendedDueDate;
+        this.allowSubmission = allowSubmission;
+        this.isPublic = isPublic;
+    }
+
+    public void updateAssignment(AssignmentDto assignmentDto) {
     }
 }

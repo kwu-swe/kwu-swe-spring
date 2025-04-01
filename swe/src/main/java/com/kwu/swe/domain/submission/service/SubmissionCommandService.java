@@ -5,11 +5,14 @@ import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SubmissionCommandService {
-    void createSubmission(SubmissionDto submissionDto);
+    Long createSubmission(SubmissionDto submissionDto);
 
     // 파일 업로드 메서드 추가
     void uploadSubmissionFile(Long submissionId, MultipartFile file);
 
     // 파일 삭제 메서드 추가
     void deleteSubmissionFile(Long submissionId);
+
+    // 제출 메서드 추가
+    void submitAssignment(Long submissionId);
 }

@@ -3,6 +3,8 @@ package com.kwu.swe.domain.assignment.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,5 +17,14 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 추후 확장: 과제 제목, 마감일, 설명 등 필요한 필드 추가 가능
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "due_date", nullable = false)
+    private LocalDateTime dueDate;  // 제출 기한 추가
+
+    // 기한이 지나지 않았는지 확인하는 메서드
+    public boolean isSubmittedOnTime(LocalDateTime submittedAt) {
+        return !submittedAt.isAfter(dueDate);  // 제출 시간이 기한 이후인지 체크
+    }
 }

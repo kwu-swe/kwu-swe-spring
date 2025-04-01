@@ -24,7 +24,7 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
     private final SubmissionFileRepository submissionFileRepository;  // SubmissionFileRepository 추가
 
     @Override
-    public void createSubmission(SubmissionDto submissionDto) {
+    public Long createSubmission(SubmissionDto submissionDto) {
         // assignmentId로 Assignment 객체 조회
         Assignment assignment = assignmentRepository.findById(submissionDto.getAssignmentId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 과제가 존재하지 않습니다."));
@@ -37,6 +37,8 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
                 .build();
 
         submissionRepository.save(submission);
+
+        return submission.getId(); // 저장된 제출물의 ID 반환
     }
 
     @Override
@@ -68,5 +70,20 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
 
         // 파일 삭제
         submissionFileRepository.delete(submissionFile);
+    }
+
+    @Override
+    public void submitAssignment(Long submissionId) {
+        // 제출 상태로 변경
+        Submission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 제출이 존재하지 않습니다."));
+
+        if (submission.getSubmittedAt().isBefore(LocalDateTime.now())) {
+            submission.updateStatus(SubmissionStatus.LATE); // LATE 상태로 변경
+        } else {
+            submission.updateStatus(SubmissionStatus.SUBMITTED); // SUBMITTED 상태로 변경
+        }
+
+        submissionRepository.save(submission);
     }
 }

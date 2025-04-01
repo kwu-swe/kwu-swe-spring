@@ -31,7 +31,7 @@ public class SubmissionApiController {
     }
 
     // ✅ 과제 ID 기준으로 제출 조회
-    @GetMapping("/assignment/{assignmentId}")
+    @GetMapping("/assignments/{assignmentId}")
     public ResponseEntity<List<Submission>> getSubmissionsByAssignmentId(@PathVariable Long assignmentId) {
         return ResponseEntity.ok(submissionQueryService.getSubmissionsByAssignmentId(assignmentId));
     }
@@ -77,4 +77,10 @@ public class SubmissionApiController {
         return ResponseEntity.ok("파일이 삭제되었습니다.");
     }
 
+    // 제출 요청 엔드포인트 추가
+    @PostMapping("/{submissionId}/submit")
+    public ResponseEntity<String> submitAssignment(@PathVariable Long submissionId) {
+        submissionCommandService.submitAssignment(submissionId);
+        return ResponseEntity.status(200).body("제출이 완료되었습니다.");
+    }
 }

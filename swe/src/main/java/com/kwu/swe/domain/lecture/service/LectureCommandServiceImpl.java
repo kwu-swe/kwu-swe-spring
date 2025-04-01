@@ -9,6 +9,8 @@ import com.kwu.swe.domain.lecture.repository.LectureRepository;
 import com.kwu.swe.domain.lecture_schedule.entity.ClassTime;
 import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
 import com.kwu.swe.global.util.EnumConvertUtil;
+import com.kwu.swe.presentation.payload.code.ErrorStatus;
+import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +39,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
         //TODO lecture professor 조회
         //lecture course 조회
         Course findCourse = courseRepository.findById(dto.getCourseId())
-                .orElseThrow(() -> new RuntimeException("not found course"));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.COURSE_NOT_FOUND));
         //lecture entity 생성
         Lecture newLecture = Lecture.builder()
                 .lectureStatus(EnumConvertUtil.convert(LectureStatus.class, dto.getLectureStatus()))
@@ -53,7 +55,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
             LectureSchedule.builder()
                     .lectureLocation(
                             lectureLocationRepository.findById(entry.getKey())
-                                    .orElseThrow(() -> new RuntimeException("cannot find lecture location"))
+                                    .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_LOCATION_NOT_FOUND))
                     )
                     .classTime(EnumConvertUtil.convert(ClassTime.class, entry.getValue()))
                     .lecture(newLecture)

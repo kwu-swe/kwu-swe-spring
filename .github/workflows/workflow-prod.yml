@@ -37,10 +37,16 @@ jobs:
           arguments: clean build -x test
           build-root-directory: swe
 
+      # docker login
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+
       # Docker build
       - name: Docker build & push
         run: |
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           docker build -t hannoi/kwu-swe-repository .
           docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
           docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}

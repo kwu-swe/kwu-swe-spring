@@ -36,3 +36,11 @@ jobs:
         with:
           arguments: clean build -x test
           build-root-directory: swe
+
+      # Docker build
+      - name: Docker build & push
+        run: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build -t hannoi/kwu-swe-repository .
+          docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
+          docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}

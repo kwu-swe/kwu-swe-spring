@@ -13,7 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Gradlew 실행 허용
       - name: Run chmod to make gradlew executable
         run: chmod +x ./swe/gradlew
 
@@ -23,43 +22,48 @@ jobs:
           java-version: 17
           distribution: 'adopt'
 
-      # 환경 변수 설정
       - name: Set environment values
         shell: bash
         run: |
           printf "%s" "${{ secrets.ENV }}" > ./swe/src/main/resources/env.properties
-          
 
-      # Gradle build (Test 제외)
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: clean build -x test
           build-root-directory: swe
 
-      # docker login
+      # DockerHub 로그인
       - name: Docker login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD}}
-      # check build file
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      # 빌드 결과 확인
       - name: Show build output
         run: ls -l ./swe/build/libs
 
-      # 1. 인증 먼저
+      # Docker 이미지 빌드 및 푸시
+      - name: Docker build & push
+        run: |
+          docker build -t hannoi/kwu-swe-repository ./swe
+          docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
+          docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}
+
+      # Google Cloud 인증
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
-      
-      # 2. gcloud 설치 및 프로젝트 설정
+
+      # gcloud 설치 + 프로젝트 설정
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID}}
-      
-      # 3. Cloud Run 배포
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      # Cloud Run 배포
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy kwu-swe-service \

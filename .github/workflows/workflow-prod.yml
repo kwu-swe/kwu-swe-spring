@@ -47,21 +47,20 @@ jobs:
       - name: Show build output
         run: ls -l ./swe/build/libs
 
-      # Docker build
-      - name: Docker build & push
-        run: |
-          docker build -t hannoi/kwu-swe-repository ./swe
-          docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
-          docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}
-          
-      - name: 'Set up Cloud SDK'
+      # 1. 인증 먼저
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      
+      # 2. gcloud 설치 및 프로젝트 설정
+      - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-
-      - name: 'Deploy to Cloud Run'
+          project_id: ${{ secrets.GCP_PROJECT_ID}}
+      
+      # 3. Cloud Run 배포
+      - name: Deploy to Cloud Run
         run: |
           gcloud run deploy kwu-swe-service \
             --image=docker.io/hannoi/kwu-swe-repository:${GITHUB_SHA::7} \

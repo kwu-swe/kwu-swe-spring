@@ -47,6 +47,6 @@ jobs:
       # Docker build
       - name: Docker build & push
         run: |
-          docker build -t hannoi/kwu-swe-repository .
+          docker build -t hannoi/kwu-swe-repository ./swe
           docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
           docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}

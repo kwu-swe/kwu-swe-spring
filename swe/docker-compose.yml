@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kwu-swe-service
+    ports:
+      - "8080:8080"
+    environment:
+      ACTIVE_LOCAL_PROFILE: prod
+    env_file:
+      - ./build/.env

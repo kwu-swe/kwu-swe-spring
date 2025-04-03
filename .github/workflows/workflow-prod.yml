@@ -74,3 +74,4 @@ jobs:
             --region=asia-northeast3 \
             --platform=managed \
             --allow-unauthenticated
+            --set-env-vars ACTIVE_LOCAL_PROFILE=prod

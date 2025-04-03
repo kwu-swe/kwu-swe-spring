@@ -32,7 +32,7 @@ jobs:
       - name: Set environment values
         shell: bash
         run: |
-          printf "%s" "${{ secrets.ENV }}" > ./swe/build/.env
+          printf "%s" "${{ secrets.ENV }}" > ./swe/.env
 
       # DockerHub 로그인
       - name: Docker login

@@ -25,7 +25,7 @@ jobs:
       - name: Set environment values
         shell: bash
         run: |
-          printf "%s" "${{ secrets.ENV }}" > ./swe/src/main/resources/env.properties
+          printf "%s" "${{ secrets.ENV }}" > ./swe/src/main/resources/.env
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2

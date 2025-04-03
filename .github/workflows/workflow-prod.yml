@@ -21,17 +21,18 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
-
-      - name: Set environment values
-        shell: bash
-        run: |
-          printf "%s" "${{ secrets.ENV }}" > ./swe/build/.env
           
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: clean build -x test
           build-root-directory: swe
+          
+      # env setting   
+      - name: Set environment values
+        shell: bash
+        run: |
+          printf "%s" "${{ secrets.ENV }}" > ./swe/build/.env
 
       # DockerHub 로그인
       - name: Docker login

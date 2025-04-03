@@ -33,6 +33,10 @@ jobs:
         shell: bash
         run: |
           printf "%s" "${{ secrets.ENV }}" > ./swe/.env
+      - name: Show .env file
+        run: |
+          ls -al ./swe
+          cat ./swe/.env || echo "No .env found"
 
       # DockerHub 로그인
       - name: Docker login
@@ -45,7 +49,6 @@ jobs:
       - name: Show build output
         run: |
           ls -l ./swe/build/libs
-          ls -al ./swe/build
 
       # Docker 이미지 빌드 및 푸시
       - name: Build Docker image using Docker Compose

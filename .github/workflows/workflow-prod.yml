@@ -25,8 +25,8 @@ jobs:
       - name: Set environment values
         shell: bash
         run: |
-          printf "%s" "${{ secrets.ENV }}" > ./swe/src/main/resources/.env
-
+          printf "%s" "${{ secrets.ENV }}" > ./swe/build/.env
+          
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
@@ -40,12 +40,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # 빌드 결과 확인 & env 파일 존재 확인
+      # 빌드 결과 확인
       - name: Show build output
         run: |
           ls -l ./swe/build/libs
-          ls -al ./swe/src/main/resources
-          cat ./swe/src/main/resources/.env
 
       # Docker 이미지 빌드 및 푸시
       - name: Docker build & push

@@ -45,6 +45,7 @@ jobs:
       - name: Show build output
         run: |
           ls -l ./swe/build/libs
+          ls -al ./swe/build
 
       # Docker 이미지 빌드 및 푸시
       - name: Build Docker image using Docker Compose

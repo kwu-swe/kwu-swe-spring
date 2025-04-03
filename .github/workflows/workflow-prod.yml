@@ -73,5 +73,5 @@ jobs:
             --image=docker.io/hannoi/kwu-swe-repository:${GITHUB_SHA::7} \
             --region=asia-northeast3 \
             --platform=managed \
-            --allow-unauthenticated
+            --allow-unauthenticated \
             --set-env-vars ACTIVE_LOCAL_PROFILE=prod

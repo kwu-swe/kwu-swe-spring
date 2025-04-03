@@ -69,4 +69,4 @@ jobs:
             --region=asia-northeast3 \
             --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars ACTIVE_LOCAL_PROFILE=prod
+            --set-env-vars=ACTIVE_LOCAL_PROFILE=prod,DATABASE_URL=${{ secrets.DATABASE_URL }},DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }},DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}

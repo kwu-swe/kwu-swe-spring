@@ -45,6 +45,7 @@ jobs:
         run: |
           ls -l ./swe/build/libs
           ls -al ./swe/src/main/resources
+          cat ./swe/src/main/resources/.env
 
       # Docker 이미지 빌드 및 푸시
       - name: Docker build & push

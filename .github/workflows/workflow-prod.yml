@@ -47,11 +47,13 @@ jobs:
           ls -l ./swe/build/libs
 
       # Docker 이미지 빌드 및 푸시
-      - name: Docker build & push
+      - name: Build Docker image using Docker Compose
         run: |
-          docker build -t hannoi/kwu-swe-repository ./swe
+          docker compose -f docker-compose.yml build
           docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
           docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}
+
+
 
       # Google Cloud 인증
       - name: Authenticate to Google Cloud

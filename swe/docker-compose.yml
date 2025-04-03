@@ -3,7 +3,7 @@ version: "3.8"
 services:
   spring-app:
     build:
-      context: .
+      context: ./swe
       dockerfile: Dockerfile
     container_name: kwu-swe-service
     ports:

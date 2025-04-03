@@ -52,8 +52,9 @@ jobs:
 
       # Docker 이미지 빌드 및 푸시
       - name: Build Docker image using Docker Compose
+        working-directory: ./swe
         run: |
-          docker compose -f ./swe/docker-compose.yml build
+          docker compose build
           docker tag hannoi/kwu-swe-repository hannoi/kwu-swe-repository:${GITHUB_SHA::7}
           docker push hannoi/kwu-swe-repository:${GITHUB_SHA::7}
 

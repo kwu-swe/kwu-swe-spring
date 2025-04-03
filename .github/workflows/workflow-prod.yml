@@ -28,15 +28,6 @@ jobs:
           arguments: clean build -x test
           build-root-directory: swe
           
-      # env setting   
-      - name: Set environment values
-        shell: bash
-        run: |
-          printf "%s" "${{ secrets.ENV }}" > ./swe/.env
-      - name: Show .env file
-        run: |
-          ls -al ./swe
-          cat ./swe/.env || echo "No .env found"
 
       # DockerHub 로그인
       - name: Docker login

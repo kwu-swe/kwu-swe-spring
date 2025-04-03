@@ -3,9 +3,9 @@ version: "3.8"
 services:
   spring-app:
     build:
-      context: ./swe
+      context: .
       dockerfile: Dockerfile
-    container_name: kwu-swe-service
+    image: hannoi/kwu-swe-repository
     ports:
       - "8080:8080"
     environment:

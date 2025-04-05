@@ -64,9 +64,9 @@ jobs:
       # Cloud Run 배포
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy kwu-swe-service \
+          gcloud run deploy kwu-swe-spring \
             --image=docker.io/hannoi/kwu-swe-repository:${GITHUB_SHA::7} \
             --region=asia-northeast3 \
             --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars=ACTIVE_LOCAL_PROFILE=prod,DATABASE_URL=${{ secrets.DATABASE_URL }},DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }},DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+            --set-env-vars=ACTIVE_LOCAL_PROFILE=prod

@@ -10,42 +10,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AssignmentCommandServiceImpl implements AssignmentCommandService {
 
-    private final AssignmentRepository assignmentRepository;  // 과제 Repository
+    private final AssignmentRepository assignmentRepository;
 
-    // 과제 생성
     @Override
     public Long createAssignment(AssignmentDto assignmentDto) {
+        // AssignmentDto로부터 Assignment 엔티티를 생성
         Assignment assignment = Assignment.builder()
-//                .lectureId(assignmentDto.getLectureId())
                 .title(assignmentDto.getTitle())
                 .content(assignmentDto.getContent())
                 .dueDate(assignmentDto.getDueDate())
                 .extendedDueDate(assignmentDto.getExtendedDueDate())
-                .allowSubmission(assignmentDto.isAllowSubmission())
-                .isPublic(assignmentDto.isPublic())
                 .build();
 
+        // Assignment 엔티티를 저장
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        return savedAssignment.getId();  // 생성된 과제 ID 반환
-    }
 
-    // 과제 수정
-    @Override
-    public void updateAssignment(Long assignmentId, AssignmentDto assignmentDto) {
-        Assignment assignment = assignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 과제가 존재하지 않습니다."));
-
-        assignment.updateAssignment(assignmentDto);  // Entity에서 update 메서드 호출
-
-        assignmentRepository.save(assignment);  // 수정된 과제 저장
-    }
-
-    // 과제 삭제
-    @Override
-    public void deleteAssignment(Long assignmentId) {
-        Assignment assignment = assignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 과제가 존재하지 않습니다."));
-
-        assignmentRepository.delete(assignment);  // 과제 삭제
+        // 저장된 Assignment의 ID를 반환
+        return savedAssignment.getId();
     }
 }

@@ -1,18 +1,16 @@
 package com.kwu.swe.domain.assignment.dto;
 
 import lombok.Getter;
-import lombok.Builder;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@Setter
 public class AssignmentDto {
-
-//    private Long lectureId;  // 과제에 해당하는 lecture ID
-    private String title;
-    private String content;
-    private LocalDateTime dueDate;
-    private LocalDateTime extendedDueDate;
-    private boolean allowSubmission;
-    private boolean isPublic;
+    private String title;  // 과제 제목
+    private String content;  // 과제 내용
+    private LocalDateTime dueDate;  // 마감일
+    private LocalDateTime extendedDueDate;  // 추가 마감일
 }

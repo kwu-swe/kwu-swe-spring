@@ -2,8 +2,11 @@ package com.kwu.swe.domain.user.controller;
 
 import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import com.kwu.swe.domain.user.dto.RegisterUserRequestDto;
+import com.kwu.swe.domain.user.dto.UserResponseDto;
 import com.kwu.swe.domain.user.entity.Role;
+import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.service.UserCommandService;
+import com.kwu.swe.domain.user.service.UserQueryService;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserApiController {
 
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
 
     @PostMapping
     public ApiResponseDto<Long> registerUser(@RequestParam String role,
@@ -32,6 +36,18 @@ public class UserApiController {
                 userCommandService.updateUserInfo(
                         studentNumber,
                         dto));
+    }
+
+    @GetMapping
+    public ApiResponseDto<UserResponseDto> getUserInfo(@RequestParam String studentNumber) {
+        User user = userQueryService.getUserInfo(studentNumber);
+        UserResponseDto result = UserResponseDto.builder()
+                .phoneNumber(user.getPhoneNumber())
+                .studentNumber(user.getStudentNumber())
+                .name(user.getName())
+                .role(user.getRole())
+                .build();
+        return ApiResponseDto.onSuccess(result);
     }
 
 }

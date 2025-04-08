@@ -24,9 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandServiceImpl implements UserCommandService{
 
     private final UserRepository userRepository;
-    private final LectureRepository lectureRepository;
-    private final LectureStudentRepository lectureStudentRepository;
-    private final LectureAssistantRepository lectureAssistantRepository;
 
     @Override
     public Long registerUser(RegisterUserRequestDto dto, Role role) {
@@ -49,36 +46,5 @@ public class UserCommandServiceImpl implements UserCommandService{
         return user.getId();
     }
 
-    @Override
-    public Long registerCourse(String studentNumber, Long lectureId) {
-        User user = userRepository.findUserByStudentNumber(studentNumber)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
-        LectureStudent lectureStudent = LectureStudent.builder()
-                .user(user)
-                .lecture(lecture)
-                .build();
-        return lectureStudentRepository.save(lectureStudent).getId();
-    }
 
-    @Override
-    public Long registerAssistantOfLecture(String professorNumber, String studentNumber, Long lectureId) {
-        User professor = userRepository.findUserByStudentNumber(professorNumber)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
-        if (!lecture.getProfessor().equals(professor)) {
-            throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
-        }
-
-        User user = userRepository.findUserByStudentNumber(studentNumber)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-
-        LectureAssistant lectureAssistant = LectureAssistant.builder()
-                .user(user)
-                .lecture(lecture)
-                .build();
-        return lectureAssistantRepository.save(lectureAssistant).getId();
-    }
 }

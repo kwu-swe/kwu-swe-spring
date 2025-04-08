@@ -33,7 +33,7 @@ public class LectureQueryServiceImpl implements LectureQueryService{
         User student = userRepository.findUserByStudentNumber(studentNumber)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         //TODO validate student
-        List<LectureStudent> lectureStudents = lectureRepository.findByStudent(student);
+        List<LectureStudent> lectureStudents = lectureStudentRepository.findByStudent(student);
 
         return lectureStudents.stream()
                 .map(LectureStudent::getLecture)

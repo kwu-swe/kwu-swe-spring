@@ -34,25 +34,4 @@ public class UserApiController {
                         dto));
     }
 
-    @PostMapping("/lectures/{lectureId}")
-    public ApiResponseDto<Long> registerCourse(@PathVariable Long lectureId,
-                                               @RequestParam String studentNumber) {
-        return ApiResponseDto.onSuccess(
-                userCommandService.registerCourse(
-                        studentNumber,
-                        lectureId));
-    }
-
-    @PostMapping("/lectures/{lectureId}/assistants/{assistantNumber}")
-    public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
-                                                  @PathVariable String assistantNumber,
-                                                  @RequestParam String professorNumber) {
-        return ApiResponseDto.onSuccess(
-                userCommandService.registerAssistantOfLecture(
-                        professorNumber,
-                        assistantNumber,
-                        lectureId
-                )
-        );
-    }
 }

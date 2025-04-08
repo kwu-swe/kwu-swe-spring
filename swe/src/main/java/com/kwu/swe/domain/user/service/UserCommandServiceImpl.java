@@ -7,6 +7,7 @@ import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import com.kwu.swe.domain.user.dto.RegisterUserRequestDto;
 import com.kwu.swe.domain.user.entity.LectureAssistant;
 import com.kwu.swe.domain.user.entity.LectureStudent;
+import com.kwu.swe.domain.user.entity.Role;
 import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.repository.LectureAssistantRepository;
 import com.kwu.swe.domain.user.repository.LectureStudentRepository;
@@ -28,8 +29,14 @@ public class UserCommandServiceImpl implements UserCommandService{
     private final LectureAssistantRepository lectureAssistantRepository;
 
     @Override
-    public Long registerUser(RegisterUserRequestDto dto) {
-        User user = User.builder().build();
+    public Long registerUser(RegisterUserRequestDto dto, Role role) {
+        User user = User.builder()
+                .name(dto.getName())
+                .password(dto.getPassword())
+                .studentNumber(dto.getStudentNumber())
+                .phoneNumber(dto.getPhoneNumber())
+                .role(role)
+                .build();
         return userRepository.save(user).getId();
     }
 

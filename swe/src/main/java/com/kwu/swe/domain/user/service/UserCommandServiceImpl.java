@@ -63,11 +63,18 @@ public class UserCommandServiceImpl implements UserCommandService{
     }
 
     @Override
-    public Long registerAssistantOfLecture(String studentNumber, Long lectureId) {
-        User user = userRepository.findUserByStudentNumber(studentNumber)
+    public Long registerAssistantOfLecture(String professorNumber, String studentNumber, Long lectureId) {
+        User professor = userRepository.findUserByStudentNumber(professorNumber)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
+        if (!lecture.getProfessor().equals(professor)) {
+            throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
+        }
+
+        User user = userRepository.findUserByStudentNumber(studentNumber)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
         LectureAssistant lectureAssistant = LectureAssistant.builder()
                 .user(user)
                 .lecture(lecture)

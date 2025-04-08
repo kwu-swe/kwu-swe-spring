@@ -12,5 +12,5 @@ public interface UserCommandService {
 
     Long registerCourse(String studentNumber, Long lectureId);
 
-    Long registerAssistantOfLecture(String studentNumber, Long lectureId);
+    Long registerAssistantOfLecture(String professorNumber, String studentNumber, Long lectureId);
 }

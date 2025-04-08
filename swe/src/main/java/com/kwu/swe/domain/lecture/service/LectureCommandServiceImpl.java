@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
 import java.util.Map;
 
 @Service
@@ -55,19 +56,19 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .lectureStatus(EnumConvertUtil.convert(LectureStatus.class, dto.getLectureStatus()))
                 .semester(EnumConvertUtil.convert(Semester.class, dto.getSemester()))
                 .sizeLimit(dto.getSizeLimit())
-                .year(dto.getYear())
+                .year(Year.of(dto.getYear()))
                 .course(findCourse)
                 .professor(professor)
                 .build();
         //lecture schedule link
         //cascade.PERSIST를 통해 lecture save시 데이터베이스에 자동 입력
-        for (Map.Entry<Long, String> entry : dto.getLectureLocationAndTime().entrySet()) {
+        for (Map.Entry<String, Long> entry : dto.getLectureTimeAndLocation().entrySet()) {
             LectureSchedule.builder()
                     .lectureLocation(
-                            lectureLocationRepository.findById(entry.getKey())
+                            lectureLocationRepository.findById(entry.getValue())
                                     .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_LOCATION_NOT_FOUND))
                     )
-                    .classTime(EnumConvertUtil.convert(ClassTime.class, entry.getValue()))
+                    .classTime(EnumConvertUtil.convert(ClassTime.class, entry.getKey()))
                     .lecture(newLecture)
                     .build().linkInList(newLecture);
         }

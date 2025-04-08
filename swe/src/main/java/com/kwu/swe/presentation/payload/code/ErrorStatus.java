@@ -40,7 +40,8 @@ public enum ErrorStatus implements BaseCode{
 
     //유저 관련 오류(4250 ~ 4299)
     USER_NOT_FOUND(NOT_FOUND, 4250, "해당 유저를 찾을 수 없습니다."),
-    ONLY_TOUCHED_BY_PROFESSOR(BAD_REQUEST, 4251, "해당 동작은 교수의 권한만이 가능합니다.")
+    ONLY_TOUCHED_BY_PROFESSOR(BAD_REQUEST, 4251, "해당 동작은 교수의 권한만이 가능합니다."),
+    NOT_MATCH_PROFESSOR(BAD_REQUEST, 4252, "해당 교수는 동작 권한이 없습니다.")
     ;
 
 

@@ -1,4 +1,4 @@
-//package com.kwu.swe.domain.user.service;
-//
-//public class UserQueryServiceImpl {
-//}
+package com.kwu.swe.domain.user.service;
+
+public class UserQueryServiceImpl {
+}

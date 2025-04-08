@@ -6,6 +6,8 @@ import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/lectures")
 @RequiredArgsConstructor
@@ -18,4 +20,7 @@ public class LectureApiController {
                                                 @RequestBody RegisterLectureRequestDto dto) {
         return ApiResponseDto.onSuccess(lectureCommandService.registerLecture(professorNumber, dto));
     }
+
+//    @GetMapping
+//    public ApiResponseDto<List<LectureResponseDto>> getAllLecture()
 }

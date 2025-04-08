@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.course.dto;
+package com.kwu.swe.domain.course.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.course.dto;
+package com.kwu.swe.domain.course.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

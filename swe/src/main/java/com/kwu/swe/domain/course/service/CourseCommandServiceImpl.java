@@ -1,6 +1,6 @@
 package com.kwu.swe.domain.course.service;
 
-import com.kwu.swe.domain.course.dto.RegisterCourseRequestDto;
+import com.kwu.swe.domain.course.dto.request.RegisterCourseRequestDto;
 import com.kwu.swe.domain.course.entity.Course;
 import com.kwu.swe.domain.course.entity.CourseType;
 import com.kwu.swe.domain.course.repository.CourseRepository;

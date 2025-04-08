@@ -87,6 +87,9 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
+        if (!user.getRole().equals(Role.ROLE_STUDENT)) {
+            throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_STUDENT);
+        }
         LectureStudent lectureStudent = LectureStudent.builder()
                 .student(user)
                 .lecture(lecture)

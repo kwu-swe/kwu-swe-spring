@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum CourseType implements KeyedEnum {
-    MAJOR_REQUIRED("전공필수"),
-    MAJOR_ELECTIVE("전공선택"),
-    GENERAL_REQUIRED("교양필수"),
-    GENERAL_ELECTIVE("교양선택");
+    MAJOR_REQUIRED("MAJOR_REQUIRED"),
+    MAJOR_ELECTIVE("MAJOR_ELECTIVE"),
+    GENERAL_REQUIRED("GENERAL_REQUIRED"),
+    GENERAL_ELECTIVE("GENERAL_ELECTIVE");
 
     private final String key;
 

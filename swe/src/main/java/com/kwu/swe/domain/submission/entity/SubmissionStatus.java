@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SubmissionStatus implements KeyedEnum {
-    SUBMITTED("제출 완료"), // 제출 완료
-    LATE("제출 지각"); // 지각 제출
+    SUBMITTED("SUBMITTED"), // 제출 완료
+    LATE("LATE"); // 지각 제출
 
     private final String key;
 }

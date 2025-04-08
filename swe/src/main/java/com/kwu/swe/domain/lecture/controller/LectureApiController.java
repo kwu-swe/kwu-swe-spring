@@ -11,7 +11,10 @@ import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lectures")
@@ -80,6 +83,14 @@ public class LectureApiController {
                                 .courseNumber(lecture.getCourse().getCourseNumber())
                                 .score(lecture.getCourse().getScore())
                                 .build())
+                        .lectureScheduleAndLocation(
+                                lecture.getLectureScheduleList().stream()
+                                        .map(schedule -> Map.of(
+                                                "classTime", schedule.getClassTime().getKey(), // 예: "MON_1"
+                                                "location", schedule.getLectureLocation().getLocation() // 예: "공학관 101호"
+                                        ))
+                                        .collect(Collectors.toList())
+                        )
                         .build()).toList();
         return result;
     }

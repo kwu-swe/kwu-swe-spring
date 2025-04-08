@@ -30,6 +30,16 @@ public class LectureApiController {
     @GetMapping
     public ApiResponseDto<List<LectureResponseDto>> getAllLecture(){
         List<Lecture> allLectures = lectureQueryService.getAllLectures();
+        return ApiResponseDto.onSuccess(getLectureResponseDtos(allLectures));
+    }
+
+    @GetMapping("/students")
+    public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(@RequestParam String studentNumber) {
+        List<Lecture> studentLectures = lectureQueryService.getStudentLectures(studentNumber);
+        return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures));
+    }
+
+    private static List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures) {
         List<LectureResponseDto> result = allLectures.stream()
                 .map(lecture -> LectureResponseDto.builder()
                         .semester(lecture.getSemester())
@@ -49,6 +59,6 @@ public class LectureApiController {
                                 .score(lecture.getCourse().getScore())
                                 .build())
                         .build()).toList();
-        return ApiResponseDto.onSuccess(result);
+        return result;
     }
 }

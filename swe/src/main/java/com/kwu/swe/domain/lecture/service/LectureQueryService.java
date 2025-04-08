@@ -7,4 +7,6 @@ import java.util.List;
 public interface LectureQueryService {
 
     List<Lecture> getAllLectures();
+
+    List<Lecture> getStudentLectures(String studentNumber);
 }

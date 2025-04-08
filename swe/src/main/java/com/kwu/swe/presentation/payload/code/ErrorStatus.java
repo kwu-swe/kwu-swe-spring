@@ -39,7 +39,8 @@ public enum ErrorStatus implements BaseCode{
     LECTURE_LOCATION_NOT_FOUND(NOT_FOUND, 4200, "해당 장소를 찾을 수 없습니다"),
 
     //유저 관련 오류(4250 ~ 4299)
-    USER_NOT_FOUND(NOT_FOUND, 4250, "해당 유저를 찾을 수 없습니다.")
+    USER_NOT_FOUND(NOT_FOUND, 4250, "해당 유저를 찾을 수 없습니다."),
+    ONLY_TOUCHED_BY_PROFESSOR(BAD_REQUEST, 4251, "해당 동작은 교수의 권한만이 가능합니다.")
     ;
 
 

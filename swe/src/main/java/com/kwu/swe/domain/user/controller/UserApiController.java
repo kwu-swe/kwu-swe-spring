@@ -2,8 +2,11 @@ package com.kwu.swe.domain.user.controller;
 
 import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import com.kwu.swe.domain.user.dto.RegisterUserRequestDto;
+import com.kwu.swe.domain.user.dto.UserResponseDto;
 import com.kwu.swe.domain.user.entity.Role;
+import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.service.UserCommandService;
+import com.kwu.swe.domain.user.service.UserQueryService;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserApiController {
 
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
 
     @PostMapping
     public ApiResponseDto<Long> registerUser(@RequestParam String role,
@@ -34,25 +38,16 @@ public class UserApiController {
                         dto));
     }
 
-    @PostMapping("/lectures/{lectureId}")
-    public ApiResponseDto<Long> registerCourse(@PathVariable Long lectureId,
-                                               @RequestParam String studentNumber) {
-        return ApiResponseDto.onSuccess(
-                userCommandService.registerCourse(
-                        studentNumber,
-                        lectureId));
+    @GetMapping
+    public ApiResponseDto<UserResponseDto> getUserInfo(@RequestParam String studentNumber) {
+        User user = userQueryService.getUserInfo(studentNumber);
+        UserResponseDto result = UserResponseDto.builder()
+                .phoneNumber(user.getPhoneNumber())
+                .studentNumber(user.getStudentNumber())
+                .name(user.getName())
+                .role(user.getRole())
+                .build();
+        return ApiResponseDto.onSuccess(result);
     }
 
-    @PostMapping("/lectures/{lectureId}/assistants/{assistantNumber}")
-    public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
-                                                  @PathVariable String assistantNumber,
-                                                  @RequestParam String professorNumber) {
-        return ApiResponseDto.onSuccess(
-                userCommandService.registerAssistantOfLecture(
-                        professorNumber,
-                        assistantNumber,
-                        lectureId
-                )
-        );
-    }
 }

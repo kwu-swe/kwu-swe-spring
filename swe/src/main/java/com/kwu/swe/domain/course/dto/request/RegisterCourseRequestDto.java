@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.course.dto;
+package com.kwu.swe.domain.course.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,4 +14,5 @@ public class RegisterCourseRequestDto {
     private String courseNumber;
     //TODO 학점 리미트 제한
     private int score;
+    private String courseType;
 }

@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role implements KeyedEnum {
-    ROLE_STUDENT("학생"),
-    ROLE_PROFESSOR("교수"),
-    ROLE_ADMIN("개발자");
+    ROLE_STUDENT("ROLE_STUDENT"),
+    ROLE_PROFESSOR("ROLE_PROFESSOR"),
+    ROLE_ADMIN("ROLE_ADMIN");
 
     private final String key;
 }

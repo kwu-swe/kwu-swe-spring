@@ -8,8 +8,12 @@ import com.kwu.swe.domain.lecture_location.repository.LectureLocationRepository;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
 import com.kwu.swe.domain.lecture_schedule.entity.ClassTime;
 import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
+import com.kwu.swe.domain.user.entity.LectureAssistant;
+import com.kwu.swe.domain.user.entity.LectureStudent;
 import com.kwu.swe.domain.user.entity.Role;
 import com.kwu.swe.domain.user.entity.User;
+import com.kwu.swe.domain.user.repository.LectureAssistantRepository;
+import com.kwu.swe.domain.user.repository.LectureStudentRepository;
 import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
@@ -30,6 +34,8 @@ public class LectureCommandServiceImpl implements LectureCommandService{
     private final LectureLocationRepository lectureLocationRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final LectureStudentRepository lectureStudentRepository;
+    private final LectureAssistantRepository lectureAssistantRepository;
 
     /**
      * 1. lecture의 course 선택
@@ -73,5 +79,41 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                     .build().linkInList(newLecture);
         }
         return lectureRepository.save(newLecture).getId();
+    }
+
+    @Override
+    public Long registerCourse(String studentNumber, Long lectureId) {
+        User user = userRepository.findUserByStudentNumber(studentNumber)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
+        if (!user.getRole().equals(Role.ROLE_STUDENT)) {
+            throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_STUDENT);
+        }
+        LectureStudent lectureStudent = LectureStudent.builder()
+                .student(user)
+                .lecture(lecture)
+                .build();
+        return lectureStudentRepository.save(lectureStudent).getId();
+    }
+
+    @Override
+    public Long registerAssistantOfLecture(String professorNumber, String studentNumber, Long lectureId) {
+        User professor = userRepository.findUserByStudentNumber(professorNumber)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
+        if (!lecture.getProfessor().equals(professor)) {
+            throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
+        }
+
+        User user = userRepository.findUserByStudentNumber(studentNumber)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        LectureAssistant lectureAssistant = LectureAssistant.builder()
+                .user(user)
+                .lecture(lecture)
+                .build();
+        return lectureAssistantRepository.save(lectureAssistant).getId();
     }
 }

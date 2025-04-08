@@ -1,4 +1,4 @@
-//package com.kwu.swe.domain.user.service;
-//
-//public interface UserCommandService {
-//}
+package com.kwu.swe.domain.user.service;
+
+public interface UserCommandService {
+}

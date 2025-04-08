@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
 import java.util.Map;
 
 @Service
@@ -55,7 +56,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .lectureStatus(EnumConvertUtil.convert(LectureStatus.class, dto.getLectureStatus()))
                 .semester(EnumConvertUtil.convert(Semester.class, dto.getSemester()))
                 .sizeLimit(dto.getSizeLimit())
-                .year(dto.getYear())
+                .year(Year.of(dto.getYear()))
                 .course(findCourse)
                 .professor(professor)
                 .build();

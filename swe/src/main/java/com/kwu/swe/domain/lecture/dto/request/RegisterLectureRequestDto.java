@@ -15,7 +15,7 @@ import java.util.Map;
 public class RegisterLectureRequestDto {
     private Long courseId;
     private int sizeLimit;
-    private Year year;
+    private int year;
     private String semester;
     private String lectureStatus;
 

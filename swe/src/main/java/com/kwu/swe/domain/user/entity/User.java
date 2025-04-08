@@ -1,5 +1,6 @@
 package com.kwu.swe.domain.user.entity;
 
+import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class User {
 
     private String password;
 
+    @Column(nullable = false, unique = true)
     private String studentNumber;
 
     private String phoneNumber;
@@ -28,4 +30,8 @@ public class User {
     private Role role;
 
 
+    public void updateInfo(EditUserInfoRequestDto dto) {
+        this.password = dto.getPassword();
+        this.phoneNumber = dto.getPhoneNumber();
+    }
 }

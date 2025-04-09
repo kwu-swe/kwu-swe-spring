@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum LectureStatus implements KeyedEnum {
 
-    BEFORE("강의 전"),
-    IN_PROGRESS("강의 중"),
-    COMPLETED("강의 완료");
+    BEFORE("BEFORE"),
+    IN_PROGRESS("IN_PROGRESS"),
+    COMPLETED("COMPLETED");
 
     private final String key;
 }

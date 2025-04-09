@@ -2,6 +2,7 @@ package com.kwu.swe.domain.lecture.entity;
 
 import com.kwu.swe.domain.course.entity.Course;
 import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
+import com.kwu.swe.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,9 +42,9 @@ public class Lecture {
     private Course course;
 
     //강의 교수 등록
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "professor_id")
-//    private User professor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "professor_id")
+    private User professor;
 
     @Builder.Default
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, orphanRemoval = true)

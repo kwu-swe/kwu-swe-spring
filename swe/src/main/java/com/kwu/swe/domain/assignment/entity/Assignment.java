@@ -17,14 +17,12 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(nullable = false)
+    private String title;  // 과제 제목
 
-    @Column(name = "due_date", nullable = false)
-    private LocalDateTime dueDate;  // 제출 기한 추가
+    @Column(nullable = false)
+    private String content;  // 과제 내용
 
-    // 기한이 지나지 않았는지 확인하는 메서드
-    public boolean isSubmittedOnTime(LocalDateTime submittedAt) {
-        return !submittedAt.isAfter(dueDate);  // 제출 시간이 기한 이후인지 체크
-    }
+    @Column(nullable = false)
+    private LocalDateTime dueDate;  // 마감일
 }

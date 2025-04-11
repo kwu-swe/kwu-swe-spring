@@ -1,12 +1,12 @@
 package com.kwu.swe.domain.submission.controller;
 
-import com.kwu.swe.domain.submission.entity.Submission;
+import com.kwu.swe.domain.submission.dto.SubmissionFileResponseDto;
+import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
+import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
+import com.kwu.swe.domain.submission.service.FileEncodingCommandServiceImpl;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
-import com.kwu.swe.domain.submission.service.SubmissionFileService; // 추가
-import com.kwu.swe.domain.submission.service.SubmissionQueryService;
-import com.kwu.swe.domain.submission.dto.SubmissionDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,68 +19,68 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubmissionApiController {
 
+    private final FileEncodingCommandServiceImpl fileEncodingService;
     private final SubmissionCommandService submissionCommandService;
-    private final SubmissionQueryService submissionQueryService;
-    private final SubmissionFileService submissionFileService;  // 추가
+    private final FileEncodingCommandServiceImpl fileEncodingCommandServiceImpl;
 
-    // 과제 제출 생성
-    @PostMapping
-    public ResponseEntity<String> submitAssignment(@RequestBody SubmissionDto submissionDto) {
-        submissionCommandService.createSubmission(submissionDto);
-        return ResponseEntity.status(201).body("제출이 완료되었습니다.");
+    @PostMapping(value = "/encode", consumes = "multipart/form-data")
+    public ResponseEntity<SubmissionFileResponseDto> encodeFile(@RequestPart("file") MultipartFile file) {
+        try {
+            // 파일 제목
+            String originalFilename = file.getOriginalFilename();
+            // 파일 인코딩 처리
+            String encodedResult = fileEncodingService.encodeFile(file);
+
+            SubmissionFileResponseDto submissionFileResponseDto = SubmissionFileResponseDto.builder()
+                    .encodedResult(encodedResult)
+                    .fileName(originalFilename)
+                    .build();
+
+            return ResponseEntity.ok(submissionFileResponseDto);  // 인코딩된 파일을 반환
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new SubmissionFileResponseDto());
+        }
     }
 
-    // ✅ 과제 ID 기준으로 제출 조회
-    @GetMapping("/assignments/{assignmentId}")
-    public ResponseEntity<List<Submission>> getSubmissionsByAssignmentId(@PathVariable Long assignmentId) {
-        return ResponseEntity.ok(submissionQueryService.getSubmissionsByAssignmentId(assignmentId));
-    }
+    @PostMapping(value = "/{assignmentId}/submit")
+    public ResponseEntity<SubmitAssignmentResponseDto> submitAssignment(
+            @RequestBody SubmitAssignmentRequestDto submitAssignmentRequestDto){
 
-    // ✅ 학생 ID 기준으로 제출 조회
-    @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<Submission>> getSubmissionsByStudentId(@PathVariable Long studentId) {
-        return ResponseEntity.ok(submissionQueryService.getSubmissionsByStudentId(studentId));
-    }
+        try {
+            // 1. 과제 제출과 상태 업데이트
+            Long submissionId = submissionCommandService.submitSubmissionAndUpdateStatus(
+                    submitAssignmentRequestDto.getAssignmentId(),
+                    submitAssignmentRequestDto.getTitle(),
+                    submitAssignmentRequestDto.getContent());
 
-    // ✅ 과제 + 학생 ID 기준 단건 조회
-    @GetMapping("/assignment/{assignmentId}/student/{studentId}")
-    public ResponseEntity<Submission> getSubmissionByAssignmentAndStudent(
-            @PathVariable Long assignmentId,
-            @PathVariable Long studentId) {
+            // 2. 파일 인코딩 및 DB에 저장
+            for (int i = 0; i < submitAssignmentRequestDto.getFileNames().size(); i++) {
+                String encodedResult = submitAssignmentRequestDto.getEncodedFiles().get(i); // 인코딩된 결과
+                String fileName = submitAssignmentRequestDto.getFileNames().get(i); // 파일 이름 (추가로 파일 이름 리스트가 있어야 함)
 
-        return submissionQueryService
-                .getSubmissionByAssignmentIdAndStudentId(assignmentId, studentId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+                // DB에 저장
+                fileEncodingService.saveFileToDB(submissionId, fileName, encodedResult);
+            }
+            // 성공 응답 반환
+            SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()
+                    .message("과제가 성공적으로 제출되었습니다.")
+                    .success(true)
+                    .submissionId(submissionId)
+                    .build();
 
-    // ✅ 파일 업로드
-    @PostMapping("/{submissionId}/file")
-    public ResponseEntity<String> uploadFile(@PathVariable Long submissionId, @RequestParam("file") MultipartFile file) {
-        submissionCommandService.uploadSubmissionFile(submissionId, file);
-        return ResponseEntity.status(201).body("파일이 업로드되었습니다.");
-    }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseDto);
 
-    // ✅ 파일 다운로드
-    @GetMapping("/{submissionId}/file")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long submissionId) {
-        byte[] fileData = submissionFileService.downloadFile(submissionId);  // Service에서 파일 다운로드 처리
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "submissionFile") // 파일 이름 추가
-                .body(fileData);  // 바이트 데이터 반환
-    }
+        } catch (IOException e) {
+            // 오류 처리
+            SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()
+                    .message("파일 인코딩 처리 중 오류가 발생했습니다.")
+                    .success(false)
+                    .build();
 
-    // 파일 삭제
-    @DeleteMapping("/{submissionId}/file")
-    public ResponseEntity<String> deleteFile(@PathVariable Long submissionId) {
-        submissionCommandService.deleteSubmissionFile(submissionId);
-        return ResponseEntity.ok("파일이 삭제되었습니다.");
-    }
-
-    // 제출 요청 엔드포인트 추가
-    @PostMapping("/{submissionId}/submit")
-    public ResponseEntity<String> submitAssignment(@PathVariable Long submissionId) {
-        submissionCommandService.submitAssignment(submissionId);
-        return ResponseEntity.status(200).body("제출이 완료되었습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(responseDto);
+        }
     }
 }

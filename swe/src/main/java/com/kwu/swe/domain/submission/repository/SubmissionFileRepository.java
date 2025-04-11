@@ -2,10 +2,9 @@ package com.kwu.swe.domain.submission.repository;
 
 import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+
+import java.util.List;
 
 public interface SubmissionFileRepository extends JpaRepository<SubmissionFile, Long> {
-
-    // submissionId로 파일을 찾는 쿼리 메서드 추가
-    Optional<SubmissionFile> findBySubmissionId(Long submissionId);
+    List<SubmissionFile> findBySubmissionId(Long submissionId); // 특정 Submission에 대한 파일 조회
 }

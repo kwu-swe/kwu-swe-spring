@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Semester implements KeyedEnum {
 
-    FIRST_SEMESTER("1학기"),
-    SECOND_SEMESTER("2학기"),
-    SUMMER("계절학기(하)"),
-    WINTER("게절학기(동)");
+    FIRST_SEMESTER("FIRST_SEMESTER"),
+    SECOND_SEMESTER("SECOND_SEMESTER"),
+    SUMMER("SUMMER"),
+    WINTER("WINTER");
 
     private final String key;
 }

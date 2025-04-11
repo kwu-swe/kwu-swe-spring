@@ -1,13 +1,15 @@
 package com.kwu.swe.domain.course.controller;
 
-import com.kwu.swe.domain.course.dto.RegisterCourseRequestDto;
+import com.kwu.swe.domain.course.dto.response.CourseResponseDto;
+import com.kwu.swe.domain.course.dto.request.RegisterCourseRequestDto;
+import com.kwu.swe.domain.course.entity.Course;
 import com.kwu.swe.domain.course.service.CourseCommandService;
+import com.kwu.swe.domain.course.service.CourseQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -15,9 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseApiController {
 
     private final CourseCommandService courseCommandService;
+    private final CourseQueryService courseQueryService;
 
     @PostMapping
     public ApiResponseDto<Long> registerCourse(@RequestBody RegisterCourseRequestDto dto) {
         return ApiResponseDto.onSuccess(courseCommandService.registerCourse(dto));
+    }
+
+    @GetMapping
+    public ApiResponseDto<List<CourseResponseDto>> getAllCourse() {
+        List<Course> allCourse = courseQueryService.getAllCourse();
+        List<CourseResponseDto> result = allCourse.stream()
+                .map(course -> CourseResponseDto.builder()
+                        .courseName(course.getCourseName())
+                        .courseNumber(course.getCourseNumber())
+                        .score(course.getScore())
+                        .courseId(course.getId())
+                        .build())
+                .toList();
+        return ApiResponseDto.onSuccess(result);
     }
 }

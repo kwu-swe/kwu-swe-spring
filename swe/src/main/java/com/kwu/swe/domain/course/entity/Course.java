@@ -17,4 +17,8 @@ public class Course {
     private String courseName;
     private String courseNumber;
     private int score;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "course_type", nullable = false)
+    private CourseType courseType;
 }

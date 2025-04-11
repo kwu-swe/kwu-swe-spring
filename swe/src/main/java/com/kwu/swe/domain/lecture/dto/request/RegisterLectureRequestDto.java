@@ -15,10 +15,10 @@ import java.util.Map;
 public class RegisterLectureRequestDto {
     private Long courseId;
     private int sizeLimit;
-    private Year year;
+    private int year;
     private String semester;
     private String lectureStatus;
 
     @Builder.Default
-    private Map<Long,String> lectureLocationAndTime = new HashMap<>();
+    private Map<String,Long> lectureTimeAndLocation= new HashMap<>();
 }

@@ -4,6 +4,9 @@ import com.kwu.swe.domain.assignment.entity.Assignment;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder(toBuilder = true)
@@ -17,21 +20,23 @@ public class Submission {
 
     private String title;
     private String content;
-    @Lob
-    private String encodingResult;
+    @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
-    public Submission(String content, String title, String encodingResult, SubmissionStatus status) {
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubmissionFile> files = new ArrayList<>(); // 파일 목록
+
+    public Submission(String content, String title, SubmissionStatus status) {
         this.content = content;
         this.title = title;
-        this.encodingResult = encodingResult;
         this.status = status;
     }
 
+    // Assignment 설정 메서드
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
     }

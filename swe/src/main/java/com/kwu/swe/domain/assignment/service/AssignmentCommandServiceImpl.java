@@ -6,6 +6,8 @@ import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AssignmentCommandServiceImpl implements AssignmentCommandService {
@@ -14,12 +16,16 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
 
     @Override
     public Long createAssignment(AssignmentDto assignmentDto) {
+
+        // 현재 날짜를 기준으로 마감일 계산
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime dueDate = currentDate.plusDays(assignmentDto.getDueDateAfterDays());
+
         // AssignmentDto로부터 Assignment 엔티티를 생성
         Assignment assignment = Assignment.builder()
                 .title(assignmentDto.getTitle())
                 .content(assignmentDto.getContent())
-                .dueDate(assignmentDto.getDueDate())
-                .extendedDueDate(assignmentDto.getExtendedDueDate())
+                .dueDate(dueDate)
                 .build();
 
         // Assignment 엔티티를 저장

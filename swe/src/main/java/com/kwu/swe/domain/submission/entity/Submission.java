@@ -1,18 +1,20 @@
 package com.kwu.swe.domain.submission.entity;
 
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // 기본 생성자 추가
-public class Submission {
+public class Submission extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

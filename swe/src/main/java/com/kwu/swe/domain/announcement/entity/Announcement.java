@@ -1,16 +1,18 @@
 package com.kwu.swe.domain.announcement.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Table(name = "announcement")
-public class Announcement {
+public class Announcement extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

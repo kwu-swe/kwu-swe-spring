@@ -1,14 +1,16 @@
 package com.kwu.swe.domain.submission.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SubmissionFile {
+public class SubmissionFile extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

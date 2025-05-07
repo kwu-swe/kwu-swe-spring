@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
-	# 🔽 GCS 키 복원
+	  
       - name: Restore GCS credentials file
         run: |
           mkdir -p swe/src/main/resources

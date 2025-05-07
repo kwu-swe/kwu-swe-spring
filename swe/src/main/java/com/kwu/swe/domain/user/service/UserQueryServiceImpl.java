@@ -16,7 +16,7 @@ public class UserQueryServiceImpl implements UserQueryService{
     private final UserRepository userRepository;
     @Override
     public User getUserInfo(String studentNumber) {
-        return userRepository.findUserByStudentNumber(studentNumber)
+        return userRepository.findUserByCode(studentNumber)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
     }
 }

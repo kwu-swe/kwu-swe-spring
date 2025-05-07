@@ -30,20 +30,20 @@ public class UserApiController {
     }
 
     @PatchMapping
-    public ApiResponseDto<Long> updateUserInfo(@RequestParam String studentNumber,
+    public ApiResponseDto<Long> updateUserInfo(@RequestParam String code,
                                                @RequestBody EditUserInfoRequestDto dto) {
         return ApiResponseDto.onSuccess(
                 userCommandService.updateUserInfo(
-                        studentNumber,
+                        code,
                         dto));
     }
 
     @GetMapping
-    public ApiResponseDto<UserResponseDto> getUserInfo(@RequestParam String studentNumber) {
-        User user = userQueryService.getUserInfo(studentNumber);
+    public ApiResponseDto<UserResponseDto> getUserInfo(@RequestParam String code) {
+        User user = userQueryService.getUserInfo(code);
         UserResponseDto result = UserResponseDto.builder()
                 .phoneNumber(user.getPhoneNumber())
-                .studentNumber(user.getStudentNumber())
+                .code(user.getCode())
                 .name(user.getName())
                 .role(user.getRole())
                 .build();

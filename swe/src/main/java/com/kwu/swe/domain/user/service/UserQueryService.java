@@ -4,5 +4,5 @@ import com.kwu.swe.domain.user.dto.UserResponseDto;
 import com.kwu.swe.domain.user.entity.User;
 
 public interface UserQueryService {
-    User getUserInfo(String studentNumber);
+    User getUserInfo(String code);
 }

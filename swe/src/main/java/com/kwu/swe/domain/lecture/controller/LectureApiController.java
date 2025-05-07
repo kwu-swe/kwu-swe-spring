@@ -25,9 +25,9 @@ public class LectureApiController {
     private final LectureQueryService lectureQueryService;
 
     @PostMapping
-    public ApiResponseDto<Long> registerLecture(@RequestParam String professorNumber,
+    public ApiResponseDto<Long> registerLecture(@RequestParam String code,
                                                 @RequestBody RegisterLectureRequestDto dto) {
-        return ApiResponseDto.onSuccess(lectureCommandService.registerLecture(professorNumber, dto));
+        return ApiResponseDto.onSuccess(lectureCommandService.registerLecture(code, dto));
     }
 
     @GetMapping
@@ -37,28 +37,28 @@ public class LectureApiController {
     }
 
     @GetMapping("/students")
-    public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(@RequestParam String studentNumber) {
-        List<Lecture> studentLectures = lectureQueryService.getStudentLectures(studentNumber);
+    public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(@RequestParam String code) {
+        List<Lecture> studentLectures = lectureQueryService.getStudentLectures(code);
         return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures));
     }
 
     @PostMapping("/{lectureId}")
     public ApiResponseDto<Long> registerCourse(@PathVariable Long lectureId,
-                                               @RequestParam String studentNumber) {
+                                               @RequestParam String code) {
         return ApiResponseDto.onSuccess(
                 lectureCommandService.registerCourse(
-                        studentNumber,
+                        code,
                         lectureId));
     }
 
     @PostMapping("/{lectureId}/assistants/{assistantNumber}")
     public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
-                                                  @PathVariable String assistantNumber,
-                                                  @RequestParam String professorNumber) {
+                                                  @PathVariable String assistantCode,
+                                                  @RequestParam String professorCode) {
         return ApiResponseDto.onSuccess(
                 lectureCommandService.registerAssistantOfLecture(
-                        professorNumber,
-                        assistantNumber,
+                        professorCode,
+                        assistantCode,
                         lectureId
                 )
         );
@@ -71,7 +71,7 @@ public class LectureApiController {
                         .professor(UserResponseDto.builder()
                                 .role(lecture.getProfessor().getRole())
                                 .name(lecture.getProfessor().getName())
-                                .studentNumber(lecture.getProfessor().getStudentNumber())
+                                .code(lecture.getProfessor().getCode())
                                 .phoneNumber(lecture.getProfessor().getPhoneNumber())
                                 .build())
                         .lectureStatus(lecture.getLectureStatus())

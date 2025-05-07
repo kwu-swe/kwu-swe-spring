@@ -11,3 +11,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: classpath:kwuswe-6763a1fdf6bd.json
+        project-id: kwuswe
+        bucket: kwu-swe-bucket

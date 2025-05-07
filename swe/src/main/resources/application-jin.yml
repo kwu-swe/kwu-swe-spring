@@ -19,6 +19,6 @@ spring:
     gcp:
       storage:
         credentials:
-          location: classpath:kwuswe-6763a1fdf6bd.json
+          location: classpath:kwuswe-c81a66f3e35d.json
         project-id: kwuswe
         bucket: kwu-swe-bucket

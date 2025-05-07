@@ -25,7 +25,7 @@ jobs:
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "kwuswe-6763a1fdf6bd.json"
-          json: ${{ secrets.CREDENTIALS_JSON }}
+          json: ${{ secrets.GCS_KEY }}
           dir: './swe/src/main/resources/'
           
       - name: Build with Gradle

@@ -2,7 +2,6 @@ package com.kwu.swe.domain.announcement.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Getter
@@ -13,6 +12,7 @@ public class AnnouncementFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "announcement_file_id")
     private Long id;
 
     private String fileName; // 파일 이름

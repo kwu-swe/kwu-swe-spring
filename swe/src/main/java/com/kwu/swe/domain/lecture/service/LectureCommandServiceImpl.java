@@ -68,7 +68,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .build();
         //lecture schedule link
         //cascade.PERSIST를 통해 lecture save시 데이터베이스에 자동 입력
-        for (Map.Entry<String, Long> entry : dto.getLectureTimeAndLocation().entrySet()) {
+        for (Map.Entry<String, Long> entry : dto.getLectureTimeAndLocationId().entrySet()) {
             LectureSchedule.builder()
                     .lectureLocation(
                             lectureLocationRepository.findById(entry.getValue())

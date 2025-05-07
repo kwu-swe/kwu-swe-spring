@@ -3,7 +3,6 @@ package com.kwu.swe.domain.announcement.entity;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Getter
@@ -15,6 +14,7 @@ public class Announcement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "announcement_id")
     private Long id; // 공지사항 고유 ID
 
     @ManyToOne(fetch = FetchType.LAZY)

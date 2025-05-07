@@ -51,7 +51,7 @@ public class LectureApiController {
                         lectureId));
     }
 
-    @PostMapping("/{lectureId}/assistants/{assistantNumber}")
+    @PostMapping("/{lectureId}/assistants/{assistantCode}")
     public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
                                                   @PathVariable String assistantCode,
                                                   @RequestParam String professorCode) {

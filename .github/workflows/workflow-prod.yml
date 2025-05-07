@@ -21,6 +21,12 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
+	# 🔽 GCS 키 복원
+      - name: Restore GCS credentials file
+        run: |
+          mkdir -p swe/src/main/resources
+          echo "${{ secrets.GCS_KEY }}" | base64 --decode > swe/src/main/resources/kwuswe-6763a1fdf6bd.json
+
           
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2

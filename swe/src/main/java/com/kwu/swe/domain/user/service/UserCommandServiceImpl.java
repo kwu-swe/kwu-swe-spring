@@ -30,7 +30,7 @@ public class UserCommandServiceImpl implements UserCommandService{
         User user = User.builder()
                 .name(dto.getName())
                 .password(dto.getPassword())
-                .studentNumber(dto.getStudentNumber())
+                .code(dto.getCode())
                 .phoneNumber(dto.getPhoneNumber())
                 .role(role)
                 .build();
@@ -38,8 +38,8 @@ public class UserCommandServiceImpl implements UserCommandService{
     }
 
     @Override
-    public Long updateUserInfo(String studentNumber, EditUserInfoRequestDto dto) {
-        User user = userRepository.findUserByStudentNumber(studentNumber)
+    public Long updateUserInfo(String code, EditUserInfoRequestDto dto) {
+        User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         user.updateInfo(dto);

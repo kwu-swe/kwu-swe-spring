@@ -12,7 +12,7 @@ import lombok.Data;
 public class UserResponseDto {
 
     private String name;
-    private String studentNumber;
+    private String code;
     private String phoneNumber;
     private Role role;
     //TODO MAJOR

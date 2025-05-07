@@ -21,7 +21,7 @@ public class User {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String studentNumber;
+    private String code;
 
     private String phoneNumber;
 

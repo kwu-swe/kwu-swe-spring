@@ -8,5 +8,5 @@ public interface LectureQueryService {
 
     List<Lecture> getAllLectures();
 
-    List<Lecture> getStudentLectures(String studentNumber);
+    List<Lecture> getStudentLectures(String code);
 }

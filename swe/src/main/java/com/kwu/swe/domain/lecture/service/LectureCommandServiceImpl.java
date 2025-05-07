@@ -46,9 +46,9 @@ public class LectureCommandServiceImpl implements LectureCommandService{
      * 학기에 따른 생성 제약을 두지 않고 최대한 자율성을 줌(동작이 보이는게 중요함)
      */
     @Override
-    public Long registerLecture(String studentNumber, RegisterLectureRequestDto dto) {
+    public Long registerLecture(String code, RegisterLectureRequestDto dto) {
         //lecture professor 조회
-        User professor = userRepository.findUserByStudentNumber(studentNumber)
+        User professor = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         //유저 권한 확인(only professor)
         if(!professor.getRole().equals(Role.ROLE_PROFESSOR)){
@@ -68,7 +68,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
                 .build();
         //lecture schedule link
         //cascade.PERSIST를 통해 lecture save시 데이터베이스에 자동 입력
-        for (Map.Entry<String, Long> entry : dto.getLectureTimeAndLocation().entrySet()) {
+        for (Map.Entry<String, Long> entry : dto.getLectureTimeAndLocationId().entrySet()) {
             LectureSchedule.builder()
                     .lectureLocation(
                             lectureLocationRepository.findById(entry.getValue())
@@ -82,8 +82,8 @@ public class LectureCommandServiceImpl implements LectureCommandService{
     }
 
     @Override
-    public Long registerCourse(String studentNumber, Long lectureId) {
-        User user = userRepository.findUserByStudentNumber(studentNumber)
+    public Long registerCourse(String code, Long lectureId) {
+        User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
@@ -98,8 +98,8 @@ public class LectureCommandServiceImpl implements LectureCommandService{
     }
 
     @Override
-    public Long registerAssistantOfLecture(String professorNumber, String studentNumber, Long lectureId) {
-        User professor = userRepository.findUserByStudentNumber(professorNumber)
+    public Long registerAssistantOfLecture(String professorCode, String assistantCode, Long lectureId) {
+        User professor = userRepository.findUserByCode(professorCode)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException((ErrorStatus.LECTURE_NOT_FOUND)));
@@ -107,7 +107,7 @@ public class LectureCommandServiceImpl implements LectureCommandService{
             throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
         }
 
-        User user = userRepository.findUserByStudentNumber(studentNumber)
+        User user = userRepository.findUserByCode(assistantCode)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         LectureAssistant lectureAssistant = LectureAssistant.builder()

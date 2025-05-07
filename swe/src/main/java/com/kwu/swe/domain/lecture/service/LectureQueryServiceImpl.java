@@ -29,8 +29,8 @@ public class LectureQueryServiceImpl implements LectureQueryService{
     }
 
     @Override
-    public List<Lecture> getStudentLectures(String studentNumber) {
-        User student = userRepository.findUserByStudentNumber(studentNumber)
+    public List<Lecture> getStudentLectures(String code) {
+        User student = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         //TODO validate student
         List<LectureStudent> lectureStudents = lectureStudentRepository.findByStudent(student);

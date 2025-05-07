@@ -2,6 +2,7 @@ package com.kwu.swe.domain.submission.repository;
 
 import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

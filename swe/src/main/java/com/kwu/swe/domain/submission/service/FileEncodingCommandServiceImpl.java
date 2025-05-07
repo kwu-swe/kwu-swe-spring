@@ -29,7 +29,7 @@ public class FileEncodingCommandServiceImpl implements FileEncodingCommandServic
         return Base64.getEncoder().encodeToString(fileBytes);
     }
 
-    //TODO C, U 기능은 Long type으로 반환
+        //TODO C, U 기능은 Long type으로 반환
     @Override
     public Long saveFileToDB(Long submissionId, String fileName, String encodedResult) throws IOException {
 

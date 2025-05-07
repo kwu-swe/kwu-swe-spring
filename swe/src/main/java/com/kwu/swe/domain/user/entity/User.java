@@ -29,7 +29,6 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-
     public void updateInfo(EditUserInfoRequestDto dto) {
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();

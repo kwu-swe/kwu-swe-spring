@@ -1,4 +1,4 @@
-package com.kwu.swe.domain.submission.dto;
+package com.kwu.swe.domain.announcement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubmitAssignmentRequestDto {
+public class AnnouncementRequestDto {
+
     private String userId;
-    private Long assignmentId;
+    private Long lectureId; // 공지사항이 속한 강의 ID
     private String title;
     private String content;
     private List<String> encodedFiles;

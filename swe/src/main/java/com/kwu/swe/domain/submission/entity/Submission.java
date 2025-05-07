@@ -1,6 +1,7 @@
 package com.kwu.swe.domain.submission.entity;
 
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,10 @@ public class Submission {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") // user 테이블의 id를 foreign key로 설정
+    private User user; // 제출한  유저 정보
+
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubmissionFile> files = new ArrayList<>(); // 파일 목록
 
@@ -34,11 +39,6 @@ public class Submission {
         this.content = content;
         this.title = title;
         this.status = status;
-    }
-
-    // Assignment 설정 메서드
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
     }
 }
 

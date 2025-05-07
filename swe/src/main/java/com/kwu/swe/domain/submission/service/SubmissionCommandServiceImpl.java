@@ -1,11 +1,12 @@
 package com.kwu.swe.domain.submission.service;
 
-import com.kwu.swe.domain.assignment.dto.AssignmentDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.entity.SubmissionStatus;
 import com.kwu.swe.domain.submission.repository.SubmissionRepository;
+import com.kwu.swe.domain.user.entity.User;
+import com.kwu.swe.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,15 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
 
     private final SubmissionRepository submissionRepository;
     private final AssignmentRepository assignmentRepository;
+    private final UserRepository userRepository;
 
     //TODO C, U 기능은 Long type으로 반환
     @Override
-    public Long submitSubmissionAndUpdateStatus(long assignmentId, String title, String content) {
+    public Long submitSubmissionAndUpdateStatus(String userId, long assignmentId, String title, String content) {
+
+        User user = userRepository.findUserByStudentNumber(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다."));
+
         // 제출할 과제 찾기
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 과제가 존재하지 않습니다."));
@@ -37,6 +43,7 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
 
         // 제출할 과제에 대한 Submission 객체 생성
         Submission submission = Submission.builder()
+                .user(user)
                 .assignment(assignment)
                 .title(title) // 제목 업데이트
                 .content(content) // 내용 업데이트

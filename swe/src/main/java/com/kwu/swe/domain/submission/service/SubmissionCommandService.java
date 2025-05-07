@@ -5,5 +5,5 @@ import com.kwu.swe.domain.submission.entity.Submission;
 
 public interface SubmissionCommandService {
 
-    Long submitSubmissionAndUpdateStatus(long assignmentId, String title, String content);
+    Long submitSubmissionAndUpdateStatus(String userId, long assignmentId, String title, String content);
 }

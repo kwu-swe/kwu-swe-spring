@@ -1,19 +1,24 @@
 package com.kwu.swe.domain.submission.controller;
 
 import com.kwu.swe.domain.submission.dto.SubmissionFileResponseDto;
+import com.kwu.swe.domain.submission.dto.SubmissionResponseDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
+import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.service.FileEncodingCommandServiceImpl;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
+import com.kwu.swe.domain.submission.service.SubmissionQueryService;
+import com.kwu.swe.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/submissions")
 @RequiredArgsConstructor
@@ -22,6 +27,8 @@ public class SubmissionApiController {
     private final FileEncodingCommandServiceImpl fileEncodingService;
     private final SubmissionCommandService submissionCommandService;
     private final FileEncodingCommandServiceImpl fileEncodingCommandServiceImpl;
+    private final SubmissionQueryService submissionQueryService;
+    private final UserRepository userRepository;
 
     @PostMapping(value = "/encode", consumes = "multipart/form-data")
     public ResponseEntity<SubmissionFileResponseDto> encodeFile(@RequestPart("file") MultipartFile file) {
@@ -50,6 +57,7 @@ public class SubmissionApiController {
         try {
             // 1. 과제 제출과 상태 업데이트
             Long submissionId = submissionCommandService.submitSubmissionAndUpdateStatus(
+                    submitAssignmentRequestDto.getUserId(),
                     submitAssignmentRequestDto.getAssignmentId(),
                     submitAssignmentRequestDto.getTitle(),
                     submitAssignmentRequestDto.getContent());
@@ -83,4 +91,36 @@ public class SubmissionApiController {
                     .body(responseDto);
         }
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<SubmissionResponseDto> getSubmissions(
+            @RequestParam String studentNumber,
+            @RequestParam Long assignmentId) {
+        Submission submittedSubmission = submissionQueryService.getSubmissionByUserAndAssignment(studentNumber, assignmentId);
+
+        log.info("submission.id = {}", submittedSubmission.getId());
+
+        // Submission -> SubmissionResponseDto로 변환
+        SubmissionResponseDto responseDto = SubmissionResponseDto.builder()
+                .id(submittedSubmission.getId())
+                .title(submittedSubmission.getTitle())
+                .content(submittedSubmission.getContent())
+                .build();
+
+        // DTO를 포함한 응답 반환
+        return ResponseEntity.ok(responseDto);
+    }
+
+/*    // 파일 디코딩 API
+    @GetMapping("/{submissionId}/decode")
+    public ResponseEntity<List<MultipartFile>> decodeSubmissionFiles(@PathVariable Long submissionId) {
+        try {
+            List<MultipartFile> multipartFiles = submissionQueryService.decodeFileToMultipartFile(submissionId);
+
+            // 성공적으로 디코딩된 파일들 반환
+            return ResponseEntity.ok(multipartFiles);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }*/
 }

@@ -42,7 +42,7 @@ public class LectureApiController {
         return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures));
     }
 
-    @PostMapping("/lectures/{lectureId}")
+    @PostMapping("/{lectureId}")
     public ApiResponseDto<Long> registerCourse(@PathVariable Long lectureId,
                                                @RequestParam String studentNumber) {
         return ApiResponseDto.onSuccess(
@@ -51,7 +51,7 @@ public class LectureApiController {
                         lectureId));
     }
 
-    @PostMapping("/lectures/{lectureId}/assistants/{assistantNumber}")
+    @PostMapping("/{lectureId}/assistants/{assistantNumber}")
     public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
                                                   @PathVariable String assistantNumber,
                                                   @RequestParam String professorNumber) {

@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,5 +28,8 @@ public class Announcement extends BaseTimeEntity {
 
     private String title; // 공지사항 제목
     private String content; // 공지사항 내용
+
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnnouncementFile> announcementFileList = new ArrayList<>();
 
 }

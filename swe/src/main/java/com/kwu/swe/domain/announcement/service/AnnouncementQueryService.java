@@ -7,4 +7,6 @@ import java.util.List;
 public interface AnnouncementQueryService {
 
     List<Announcement> getAnnouncementByLectureId(Long lectureId);
+
+    Announcement getSpecificAnnouncement(Long announcementId);
 }

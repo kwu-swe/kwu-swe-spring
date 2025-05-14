@@ -13,12 +13,14 @@ import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -49,7 +51,7 @@ public class AnnouncementCommandServiceImpl implements AnnouncementCommandServic
                 fileURL -> {
                     files.add(AnnouncementFile.builder()
                             .announcement(build)
-                            .encodedResult(fileURL)
+                            .encodedURL(fileURL)
                             .build());
                 }
         );

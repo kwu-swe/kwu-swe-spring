@@ -48,7 +48,7 @@ public class AnnouncementApiController {
                 .encodedFiles(
                         specificAnnouncement.getAnnouncementFileList().stream()
                                 .map(
-                                        announcementFile -> announcementFile.getFileName()
+                                        announcementFile -> announcementFile.getEncodedURL()
                                 ).toList()
                 )
                 .content(specificAnnouncement.getContent())

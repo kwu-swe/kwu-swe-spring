@@ -17,9 +17,7 @@ public class AnnouncementFile extends BaseTimeEntity {
     @Column(name = "announcement_file_id")
     private Long id;
 
-    private String fileName; // 파일 이름
-    @Lob
-    private String encodedResult; // 파일의 인코딩 결과
+    private String encodedURL; // 파일의 인코딩 결과
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "announcement_id")

@@ -73,6 +73,7 @@ public class LectureApiController {
                                 .name(lecture.getProfessor().getName())
                                 .code(lecture.getProfessor().getCode())
                                 .phoneNumber(lecture.getProfessor().getPhoneNumber())
+                                .createdAt(lecture.getProfessor().getCreatedAt())
                                 .build())
                         .lectureStatus(lecture.getLectureStatus())
                         .year(lecture.getYear())
@@ -83,6 +84,7 @@ public class LectureApiController {
                                 .courseName(lecture.getCourse().getCourseName())
                                 .courseNumber(lecture.getCourse().getCourseNumber())
                                 .score(lecture.getCourse().getScore())
+                                .createdAt(lecture.getCourse().getCreatedAt())
                                 .build())
                         .lectureScheduleAndLocation(
                                 lecture.getLectureScheduleList().stream()

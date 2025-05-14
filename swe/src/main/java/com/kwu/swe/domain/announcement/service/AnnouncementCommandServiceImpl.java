@@ -2,6 +2,8 @@ package com.kwu.swe.domain.announcement.service;
 
 import com.kwu.swe.domain.announcement.dto.AnnouncementRequestDto;
 import com.kwu.swe.domain.announcement.entity.Announcement;
+import com.kwu.swe.domain.announcement.entity.AnnouncementFile;
+import com.kwu.swe.domain.announcement.repository.AnnouncementFileRepository;
 import com.kwu.swe.domain.announcement.repository.AnnouncementRepository;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
@@ -14,12 +16,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class AnnouncementCommandServiceImpl implements AnnouncementCommandService{
 
     private final AnnouncementRepository announcementRepository;
+    private final AnnouncementFileRepository announcementFileRepository;
     private final UserRepository userRepository;
     private final LectureRepository lectureRepository;
     @Override
@@ -36,6 +42,18 @@ public class AnnouncementCommandServiceImpl implements AnnouncementCommandServic
                 .content(announcementRequestDto.getContent())
                 .lecture(lecture)
                 .build();
-        return announcementRepository.save(build).getId();
+        announcementRepository.save(build);
+        // SAVE FILES
+        List<AnnouncementFile> files = new ArrayList<>();
+        announcementRequestDto.getEncodedFiles().forEach(
+                fileURL -> {
+                    files.add(AnnouncementFile.builder()
+                            .announcement(build)
+                            .encodedResult(fileURL)
+                            .build());
+                }
+        );
+        announcementFileRepository.saveAll(files);
+        return build.getId();
     }
 }

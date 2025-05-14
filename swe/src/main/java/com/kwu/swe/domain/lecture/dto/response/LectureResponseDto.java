@@ -7,6 +7,7 @@ import com.kwu.swe.domain.user.dto.UserResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class LectureResponseDto {
     private Year year;
     private LectureStatus lectureStatus;
     private Semester semester;
+    private LocalDateTime createdAt;
     private UserResponseDto professor;
     private CourseResponseDto courseResponseDto;
     @Builder.Default

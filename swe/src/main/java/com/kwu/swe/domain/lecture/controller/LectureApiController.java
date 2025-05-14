@@ -77,6 +77,7 @@ public class LectureApiController {
                         .lectureStatus(lecture.getLectureStatus())
                         .year(lecture.getYear())
                         .sizeLimit(lecture.getSizeLimit())
+                        .createdAt(lecture.getCreatedAt())
                         .courseResponseDto(CourseResponseDto.builder()
                                 .courseId(lecture.getCourse().getId())
                                 .courseName(lecture.getCourse().getCourseName())

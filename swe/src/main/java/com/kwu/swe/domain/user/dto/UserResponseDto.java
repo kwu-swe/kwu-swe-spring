@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class UserResponseDto {
@@ -15,5 +17,6 @@ public class UserResponseDto {
     private String code;
     private String phoneNumber;
     private Role role;
+    private LocalDateTime createdAt;
     //TODO MAJOR
 }

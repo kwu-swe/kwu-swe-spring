@@ -32,6 +32,7 @@ public class LocationApiController {
                         .locationName(l.getLocation())
                         .sizeLimit(l.getSizeLimit())
                         .locationId(l.getId())
+                        .createdAt(l.getCreatedAt())
                         .build())
                 .toList();
         return ApiResponseDto.onSuccess(result);

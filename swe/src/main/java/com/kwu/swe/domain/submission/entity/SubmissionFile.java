@@ -7,10 +7,10 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SubmissionFile extends BaseTimeEntity {
+public class SubmissionFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

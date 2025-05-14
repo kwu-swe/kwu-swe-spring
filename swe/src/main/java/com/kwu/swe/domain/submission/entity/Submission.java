@@ -11,10 +11,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // 기본 생성자 추가
-public class Submission extends BaseTimeEntity {
+public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AssignmentQueryService {
 
-    List<Assignment> findAssignmentsByLectureId(Long lecturerId);
+    Assignment findByAssignmentId(Long assignmentId);
 
-    Assignment getAssignmentByLectureIdAndAssignmentId(Long lectureId, Long assignmentId);
+    List<Assignment> findAssignmentsByLectureId(Long lecturerId);
 }

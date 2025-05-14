@@ -65,9 +65,8 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
 
     public Long updateAssignment(Long lectureId, Long assignmentId, AssignmentRequestDto assignmentRequestDto) {
 
-        // lectureId와 assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findByLectureIdAndId(lectureId, assignmentId);
-
+        // assignmentId로 과제 조회
+        Assignment assignment = assignmentRepository.findById(assignmentId);
 
         assignment.update(assignmentRequestDto.getTitle(), assignmentRequestDto.getContent());
 
@@ -91,8 +90,8 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
 
     public void deleteAssignment(Long lectureId, Long assignmentId) {
 
-        // lectureId와 assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findByLectureIdAndId(lectureId, assignmentId);
+        // assignmentId로 과제 조회
+        Assignment assignment = assignmentRepository.findById(assignmentId);
 
         // 과제 삭제
         assignmentRepository.delete(assignment);

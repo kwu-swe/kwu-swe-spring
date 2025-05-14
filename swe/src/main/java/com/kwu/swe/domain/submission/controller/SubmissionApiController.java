@@ -1,6 +1,5 @@
 package com.kwu.swe.domain.submission.controller;
 
-import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
 import com.kwu.swe.domain.submission.entity.Submission;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,8 +41,6 @@ public class SubmissionApiController {
                     .body(new SubmissionFileResponseDto());
         }
     }*/
-
-
 
     @PostMapping(value = "/lecture/{lectureId}/assignment/{assignmentId}")
     public ResponseEntity<SubmitAssignmentResponseDto> submitAssignment(

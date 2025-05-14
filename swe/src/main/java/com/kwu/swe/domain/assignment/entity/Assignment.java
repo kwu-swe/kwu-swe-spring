@@ -28,6 +28,7 @@ public class Assignment {
     private String content;  // 과제 내용
 
     @Column(nullable = false)
+    @Builder.Default
     private LocalDateTime dueDate;  // 마감일
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -14,7 +14,6 @@ import java.util.List;
 public class AssignmentQueryServiceImpl implements AssignmentQueryService {
 
     private final AssignmentRepository assignmentRepository;
-    private final UserRepository userRepository;
 
     @Override
     public List<Assignment> findAssignmentsByLectureId(Long lecturerId) {
@@ -22,8 +21,7 @@ public class AssignmentQueryServiceImpl implements AssignmentQueryService {
     }
 
     @Override
-     public Assignment getAssignmentByLectureIdAndAssignmentId(Long lectureId, Long assignmentId) {
-        return assignmentRepository.findByLectureIdAndId(lectureId, assignmentId);
+    public Assignment findByAssignmentId(Long assignmentId) {
+        return assignmentRepository.findById(assignmentId) ;
     }
-
 }

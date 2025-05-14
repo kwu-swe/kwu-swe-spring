@@ -1,6 +1,7 @@
 package com.kwu.swe.domain.submission.entity;
 
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,13 +20,19 @@ public class Submission {
     private Long id;
 
     private String title;
+
     private String content;
+
     @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubmissionFile> files = new ArrayList<>(); // 파일 목록

@@ -14,7 +14,6 @@ public class AssignmentFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
     private String encodedURL; // 파일의 인코딩 결과
 
     @ManyToOne(fetch = FetchType.LAZY)

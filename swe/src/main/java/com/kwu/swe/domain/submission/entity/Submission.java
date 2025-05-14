@@ -1,8 +1,10 @@
 package com.kwu.swe.domain.submission.entity;
 
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -27,6 +27,7 @@ public class Announcement extends BaseTimeEntity {
     private Lecture lecture; // 강의 정보
 
     private String title; // 공지사항 제목
+    @Lob
     private String content; // 공지사항 내용
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)

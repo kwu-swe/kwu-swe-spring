@@ -17,7 +17,7 @@ import java.util.Map;
 @Builder
 public class LectureResponseDto {
     private int sizeLimit;
-    private Year year;
+    private int year;
     private LectureStatus lectureStatus;
     private Semester semester;
     private LocalDateTime createdAt;

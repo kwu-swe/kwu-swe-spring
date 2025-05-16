@@ -34,6 +34,7 @@ public class Submission {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubmissionFile> files = new ArrayList<>(); // 파일 목록
 
@@ -41,6 +42,11 @@ public class Submission {
         this.content = content;
         this.title = title;
         this.status = status;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     // Assignment 설정 메서드

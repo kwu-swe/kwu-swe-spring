@@ -1,7 +1,6 @@
 package com.kwu.swe.domain.assignment.entity;
 
 import com.kwu.swe.domain.lecture.entity.Lecture;
-import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,9 +27,9 @@ public class Assignment {
     private String content;  // 과제 내용
 
     @Column(nullable = false)
-    @Builder.Default
     private LocalDateTime dueDate;  // 마감일
 
+    @Builder.Default
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssignmentFile> files = new ArrayList<>(); // 파일 목록
 

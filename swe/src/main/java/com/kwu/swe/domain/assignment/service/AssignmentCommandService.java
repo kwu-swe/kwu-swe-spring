@@ -6,7 +6,7 @@ public interface AssignmentCommandService {
     Long createAssignment(AssignmentRequestDto assignmentRequestDto, Long lectureId);  // 과제 생성 메서드
 
     // 특정 assignmentId에 대한 Assignment 수정
-    Long updateAssignment(Long lectureId, Long assignmentId, AssignmentRequestDto assignmentRequestDto);
+    Long updateAssignment(Long assignmentId, AssignmentRequestDto assignmentRequestDto);
 
-    void deleteAssignment(Long lectureId, Long assignmentId);
+    void deleteAssignment(Long assignmentId);
 }

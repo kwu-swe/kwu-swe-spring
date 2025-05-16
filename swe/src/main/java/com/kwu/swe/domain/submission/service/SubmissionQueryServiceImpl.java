@@ -15,10 +15,7 @@ public class SubmissionQueryServiceImpl implements SubmissionQueryService {
     private final SubmissionRepository submissionRepository;
 
     @Override
-    public Submission getSubmissionByUserAndAssignment(String studentNumber, Long assignmentId) {
-
-
-
-        return null;
+    public Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, Long userId) {
+        return submissionRepository.findSubmissionByAssignmentIdAndUserId(assignmentId, userId);
     }
 }

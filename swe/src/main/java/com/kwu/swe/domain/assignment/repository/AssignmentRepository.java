@@ -9,5 +9,4 @@ import java.util.List;
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     List<Assignment> findByLectureId(Long lecturerId);
 
-    Assignment findById(Long assignmentId);
 }

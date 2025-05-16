@@ -45,44 +45,45 @@ public class AssignmentApiController {
                         .build())
                 .collect(Collectors.toList());
 
-        // 과제가 있으면 200 OK 반환
         return ApiResponseDto.onSuccess(responseDtos);
     }
 
 
     // 특정 assignmentId에 대한 Assignment 조회
-    @GetMapping("/assignments/{assignmentId}")
+    @GetMapping("/{assignmentId}")
     public ApiResponseDto<AssignmentResponseDto> getAssignmentByLectureIdAndAssignmentId(
             @PathVariable Long assignmentId) {
 
         // assignmentId에 해당하는 Assignment 조회
             Assignment assignment = assignmentQueryService.findByAssignmentId(assignmentId);
 
-            AssignmentResponseDto responseDto = AssignmentResponseDto.builder()
-                    .title(assignment.getTitle())
-                    .dueDate(assignment.getDueDate())
-                    .build();
+        AssignmentResponseDto responseDto = AssignmentResponseDto.builder()
+                .title(assignment.getTitle())
+                .content(assignment.getContent())
+                .dueDate(assignment.getDueDate())
+                .encodedFiles(assignment.getFiles().stream()
+                        .map(assignmentFile -> assignmentFile.getEncodedURL())
+                        .toList())
+                .build();
 
             return ApiResponseDto.onSuccess(responseDto);
     }
 
     // 특정 assignmentId에 대한 Assignment 수정
-    @PutMapping("/assignments/{assignmentId}")
+    @PutMapping("/{assignmentId}")
     public ApiResponseDto<Long> updateAssignment(
-            @PathVariable Long lectureId,
             @PathVariable Long assignmentId,
             @RequestBody AssignmentRequestDto updatedAssignment) {
 
-        return ApiResponseDto.onSuccess(assignmentService.updateAssignment(lectureId, assignmentId, updatedAssignment));
+        return ApiResponseDto.onSuccess(assignmentService.updateAssignment(assignmentId, updatedAssignment));
     }
 
     // 특정 assignmentId에 대한 Assignment 삭제
-    @DeleteMapping("/assignments/{assignmentId}")
+    @DeleteMapping("/{assignmentId}")
     public ApiResponseDto<Void> deleteAssignment(
-            @PathVariable Long lectureId,
             @PathVariable Long assignmentId) {
 
-        assignmentService.deleteAssignment(lectureId, assignmentId);
+        assignmentService.deleteAssignment(assignmentId);
         return ApiResponseDto.onSuccess(null);
     }
 }

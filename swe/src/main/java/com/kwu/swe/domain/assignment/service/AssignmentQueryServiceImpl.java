@@ -22,6 +22,6 @@ public class AssignmentQueryServiceImpl implements AssignmentQueryService {
 
     @Override
     public Assignment findByAssignmentId(Long assignmentId) {
-        return assignmentRepository.findById(assignmentId) ;
+        return assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
     }
 }

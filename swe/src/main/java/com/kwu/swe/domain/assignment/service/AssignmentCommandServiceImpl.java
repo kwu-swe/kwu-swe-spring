@@ -26,7 +26,7 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
     @Override
     public Long createAssignment(AssignmentRequestDto assignmentRequestDto, Long lectureId) {
 
-        Lecture lecture = lectureRepository.findById(lectureId).orElse(null);
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(RuntimeException::new);
 
         // 현재 날짜를 기준으로 마감일 계산
         LocalDateTime currentDate = LocalDateTime.now();
@@ -63,10 +63,10 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
         return savedAssignment.getId();
     }
 
-    public Long updateAssignment(Long lectureId, Long assignmentId, AssignmentRequestDto assignmentRequestDto) {
+    public Long updateAssignment(Long assignmentId, AssignmentRequestDto assignmentRequestDto) {
 
         // assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findById(assignmentId);
+        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
 
         assignment.update(assignmentRequestDto.getTitle(), assignmentRequestDto.getContent());
 
@@ -88,10 +88,10 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
         return assignment.getId();
     }
 
-    public void deleteAssignment(Long lectureId, Long assignmentId) {
+    public void deleteAssignment(Long assignmentId) {
 
         // assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findById(assignmentId);
+        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
 
         // 과제 삭제
         assignmentRepository.delete(assignment);

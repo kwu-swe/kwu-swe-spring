@@ -67,6 +67,7 @@ public class LectureApiController {
     private static List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures) {
         List<LectureResponseDto> result = allLectures.stream()
                 .map(lecture -> LectureResponseDto.builder()
+                        .lectureId(lecture.getId())
                         .semester(lecture.getSemester())
                         .professor(UserResponseDto.builder()
                                 .role(lecture.getProfessor().getRole())

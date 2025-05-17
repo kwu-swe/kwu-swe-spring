@@ -10,12 +10,14 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Data
 @Builder
 public class LectureResponseDto {
+    private Long lectureId;
     private int sizeLimit;
     private int year;
     private LectureStatus lectureStatus;
@@ -24,5 +26,5 @@ public class LectureResponseDto {
     private UserResponseDto professor;
     private CourseResponseDto courseResponseDto;
     @Builder.Default
-    private List<Map<String, String>> lectureScheduleAndLocation = new ArrayList<>();
+    private Map<String, String> lectureTimeAndLocationId = new HashMap<>();
 }

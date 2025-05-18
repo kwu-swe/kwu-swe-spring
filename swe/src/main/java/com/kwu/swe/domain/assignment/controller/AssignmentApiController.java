@@ -1,5 +1,6 @@
 package com.kwu.swe.domain.assignment.controller;
 
+import com.kwu.swe.domain.assignment.dto.AllAssignmentResponseDto;
 import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
 import com.kwu.swe.domain.assignment.dto.AssignmentResponseDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
@@ -33,13 +34,13 @@ public class AssignmentApiController {
 
     // 특정 lectureId에 대한 모든 Assignment 조회
     @GetMapping("/lectures/{lectureId}")
-    public ApiResponseDto<List<AssignmentResponseDto>> getAssignmentsByLectureId(@PathVariable Long lectureId) {
+    public ApiResponseDto<List<AllAssignmentResponseDto>> getAssignmentsByLectureId(@PathVariable Long lectureId) {
         // lectureId에 해당하는 모든 Assignment 조회
         List<Assignment> assignments = assignmentQueryService.findAssignmentsByLectureId(lectureId);
 
         // List<Assignment>을 List<AssignmentResponseDto>로 변환
-        List<AssignmentResponseDto> responseDtos = assignments.stream()
-                .map(assignment -> AssignmentResponseDto.builder()
+        List<AllAssignmentResponseDto> responseDtos = assignments.stream()
+                .map(assignment -> AllAssignmentResponseDto.builder()
                         .title(assignment.getTitle())
                         .dueDate(assignment.getDueDate())
                         .build())

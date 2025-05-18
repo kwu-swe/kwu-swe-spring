@@ -1,12 +1,9 @@
 package com.kwu.swe.domain.submission.controller;
 
-import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
-import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
 import com.kwu.swe.domain.submission.entity.Submission;
-import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
 import com.kwu.swe.domain.submission.service.SubmissionQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
@@ -14,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/submissions")

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class AllAssignmentResponseDto {
+    private Long assignmentId;
     private String title;
     private LocalDateTime dueDate;
 }

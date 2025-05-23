@@ -12,6 +12,8 @@ import com.kwu.swe.domain.submission.repository.SubmissionFileRepository;
 import com.kwu.swe.domain.submission.repository.SubmissionRepository;
 import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.repository.UserRepository;
+import com.kwu.swe.presentation.payload.code.ErrorStatus;
+import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +36,11 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
     @Override
     public Long submitSubmissionAndUpdateStatus(Long assignmentId, Long userId ,SubmitAssignmentRequestDto submitAssignmentRequestDto) {
 
-        Assignment assignment = assignmentRepository.getById(assignmentId);
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
 
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         // 제출일과 과제의 마감일을 비교
         LocalDateTime currentTime = LocalDateTime.now(); // 현재 날짜
@@ -74,7 +78,8 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
     public Long updateSubmission(Long submissionId, SubmitAssignmentRequestDto submitAssignmentRequestDto) {
 
         // submissionId로 과제 조회
-        Submission submission = submissionRepository.findById(submissionId).orElseThrow(RuntimeException::new);
+        Submission submission = submissionRepository.findById(submissionId)
+                        .orElseThrow(() -> new GeneralException(ErrorStatus.SUBMISSION_NOT_FOUND));
 
         submission.update(submitAssignmentRequestDto.getTitle(), submitAssignmentRequestDto.getContent());
 
@@ -99,7 +104,8 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
     @Override
     public void deleteSubmission(Long submissionId) {
         // submissionId로 제출한 과제 조회
-        Submission submission = submissionRepository.findById(submissionId).orElseThrow(RuntimeException::new);
+        Submission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.SUBMISSION_NOT_FOUND));
 
         // 제출한 과제 삭제
         submissionRepository.delete(submission);

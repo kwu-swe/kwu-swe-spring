@@ -32,7 +32,7 @@ public class SubmissionApiController {
         return ApiResponseDto.onSuccess("과제가 성공적으로 제출되었습니다. 과제 ID: " + submissionId);
     }
 
-@GetMapping("/assignments/{assignmentId}/users/{userId}")
+    @GetMapping("/assignments/{assignmentId}/users/{userId}")
     public ApiResponseDto<SubmitAssignmentResponseDto> getSubmissions(
             @PathVariable Long assignmentId,
             @PathVariable Long userId) throws IOException {  // IOException을 처리
@@ -41,6 +41,7 @@ public class SubmissionApiController {
 
         // Submission -> SubmissionResponseDto로 변환
         SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()
+                .submissionId(submittedSubmission.getId())
                 .title(submittedSubmission.getTitle())
                 .content(submittedSubmission.getContent())
                 .encodedFiles(submittedSubmission.getFiles().stream()

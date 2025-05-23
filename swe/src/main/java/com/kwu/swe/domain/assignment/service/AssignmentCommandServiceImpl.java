@@ -7,6 +7,8 @@ import com.kwu.swe.domain.assignment.repository.AssignmentFileRepository;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
+import com.kwu.swe.presentation.payload.code.ErrorStatus;
+import com.kwu.swe.presentation.payload.exception.GeneralException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,9 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
 
     @Override
     public Long createAssignment(AssignmentRequestDto assignmentRequestDto, Long lectureId) {
-
-        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(RuntimeException::new);
+        //lecture 조회
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_NOT_FOUND));
 
         // 현재 날짜를 기준으로 마감일 계산
         LocalDateTime currentDate = LocalDateTime.now();
@@ -63,10 +66,12 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
         return savedAssignment.getId();
     }
 
+    //  assignment 수정
     public Long updateAssignment(Long assignmentId, AssignmentRequestDto assignmentRequestDto) {
 
         // assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                        .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
 
         assignment.update(assignmentRequestDto.getTitle(), assignmentRequestDto.getContent());
 
@@ -91,7 +96,8 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
     public void deleteAssignment(Long assignmentId) {
 
         // assignmentId로 과제 조회
-        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
 
         // 과제 삭제
         assignmentRepository.delete(assignment);

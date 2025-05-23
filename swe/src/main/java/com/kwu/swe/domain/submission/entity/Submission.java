@@ -1,6 +1,7 @@
 package com.kwu.swe.domain.submission.entity;
 
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,9 @@ public class Submission {
     private Long id;
 
     private String title;
+
     private String content;
+
     @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
@@ -29,6 +32,11 @@ public class Submission {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Builder.Default
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubmissionFile> files = new ArrayList<>(); // 파일 목록
 
@@ -36,6 +44,11 @@ public class Submission {
         this.content = content;
         this.title = title;
         this.status = status;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     // Assignment 설정 메서드

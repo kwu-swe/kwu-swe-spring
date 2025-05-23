@@ -43,6 +43,7 @@ public enum ErrorStatus implements BaseCode{
     ONLY_TOUCHED_BY_PROFESSOR(BAD_REQUEST, 4251, "해당 동작은 교수의 권한만이 가능합니다."),
     NOT_MATCH_PROFESSOR(BAD_REQUEST, 4252, "해당 교수는 동작 권한이 없습니다."),
     ONLY_TOUCHED_BY_STUDENT(BAD_REQUEST, 4253, "해당 동작은 학생의 권한만이 가능합니다."),
+    ASSIGNMENT_NOT_FOUND(NOT_FOUND, 4350,"해당 과제는 찾을 수 없습니다" ),
     ANNOUNCEMENT_NOT_FOUND(NOT_FOUND, 4300, "해당 공지사항은 찾을 수 없습니다."),
     MATERIAL_NOT_FOUND(NOT_FOUND, 4400, "해당 강의 자료는 찾을 수 없습니다.");
 

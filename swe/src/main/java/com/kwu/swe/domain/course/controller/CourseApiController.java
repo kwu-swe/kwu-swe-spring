@@ -33,6 +33,7 @@ public class CourseApiController {
                         .courseNumber(course.getCourseNumber())
                         .score(course.getScore())
                         .courseId(course.getId())
+                        .createdAt(course.getCreatedAt())
                         .build())
                 .toList();
         return ApiResponseDto.onSuccess(result);

@@ -1,16 +1,18 @@
 package com.kwu.swe.domain.lecture_schedule.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture_location.entity.LectureLocation;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class LectureSchedule {
+public class LectureSchedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

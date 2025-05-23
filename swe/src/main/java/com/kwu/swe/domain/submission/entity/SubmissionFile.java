@@ -1,7 +1,9 @@
 package com.kwu.swe.domain.submission.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter

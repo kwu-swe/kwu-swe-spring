@@ -1,15 +1,17 @@
 package com.kwu.swe.domain.user.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class User {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String studentNumber;
+    private String code;
 
     private String phoneNumber;
 

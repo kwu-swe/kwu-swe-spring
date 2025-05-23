@@ -8,5 +8,5 @@ public interface UserCommandService {
 
     Long registerUser(RegisterUserRequestDto dto, Role role);
 
-    Long updateUserInfo(String studentNumber, EditUserInfoRequestDto dto);
+    Long updateUserInfo(String code, EditUserInfoRequestDto dto);
 }

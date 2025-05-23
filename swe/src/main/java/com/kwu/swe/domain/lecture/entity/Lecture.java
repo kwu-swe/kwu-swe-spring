@@ -1,10 +1,12 @@
 package com.kwu.swe.domain.lecture.entity;
 
+import com.kwu.swe.domain.auditing.entity.BaseTimeEntity;
 import com.kwu.swe.domain.course.entity.Course;
 import com.kwu.swe.domain.lecture_schedule.entity.LectureSchedule;
 import com.kwu.swe.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -12,10 +14,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Lecture {
+public class Lecture extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

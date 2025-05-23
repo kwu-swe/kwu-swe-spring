@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserQueryServiceImpl implements UserQueryService{
     private final UserRepository userRepository;
     @Override
-    public User getUserInfo(String studentNumber) {
-        return userRepository.findUserByStudentNumber(studentNumber)
+    public User getUserInfo(String code) {
+        return userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
     }
 }

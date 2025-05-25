@@ -37,4 +37,16 @@ public class LocationApiController {
                 .toList();
         return ApiResponseDto.onSuccess(result);
     }
+
+    @GetMapping("/{locationId}")
+    public ApiResponseDto<LocationResponseDto> getLocationById(@PathVariable Long locationId) {
+        LectureLocation lectureLocation = lectureLocationQueryService.getLectureLocationById(locationId);
+        LocationResponseDto result = LocationResponseDto.builder()
+                .locationName(lectureLocation.getLocation())
+                .sizeLimit(lectureLocation.getSizeLimit())
+                .locationId(lectureLocation.getId())
+                .createdAt(lectureLocation.getCreatedAt())
+                .build();
+        return ApiResponseDto.onSuccess(result);
+    }
 }

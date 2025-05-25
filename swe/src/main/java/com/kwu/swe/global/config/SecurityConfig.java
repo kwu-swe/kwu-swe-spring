@@ -1,8 +1,10 @@
 package com.kwu.swe.global.config;
 
+import com.kwu.swe.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +14,11 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.List;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -58,8 +65,6 @@ public class SecurityConfig {
                             .requestMatchers("/", "/.well-known/**", "/css/**", "/*.ico", "/error", "/images/**").permitAll()
                             .requestMatchers(permitAllRequest()).permitAll()
                             .requestMatchers(additionalSwaggerRequests()).permitAll()
-                            .requestMatchers(authRelatedEndpoints()).permitAll()
-                            .requestMatchers(permitAllRequestV2()).permitAll()
                             .anyRequest().authenticated();
                 });
     }
@@ -67,6 +72,39 @@ public class SecurityConfig {
     private void addFilter(HttpSecurity httpSecurity) {
         httpSecurity
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private RequestMatcher[] permitAllRequest() {
+        List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/health_check"),
+                antMatcher("/actuator/**"),
+                antMatcher("/welcome"),
+                antMatcher("/v1/api/access/**")
+        );
+        return requestMatchers.toArray(RequestMatcher[]::new);
+    }
+
+    private RequestMatcher[] additionalSwaggerRequests() {
+        List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/swagger-ui/**"),
+                antMatcher("/swagger-ui"),
+                antMatcher("/swagger-ui.html"),
+                antMatcher("/swagger/**"),
+                antMatcher("/swagger-resources/**"),
+                antMatcher("/v3/api-docs/**"),
+                antMatcher("/profile")
+        );
+        return requestMatchers.toArray(RequestMatcher[]::new);
+    }
+
+    private RequestMatcher[] permitRequest() {
+        List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/api/courses"),
+                antMatcher("/api/images"),
+                antMatcher("/api/locations"),
+                antMatcher(HttpMethod.POST, "/api/users")
+        );
+        return requestMatchers.toArray(RequestMatcher[]::new);
     }
 
 }

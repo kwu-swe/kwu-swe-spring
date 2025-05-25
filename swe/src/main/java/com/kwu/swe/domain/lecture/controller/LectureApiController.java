@@ -67,6 +67,7 @@ public class LectureApiController {
     private static List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures) {
         List<LectureResponseDto> result = allLectures.stream()
                 .map(lecture -> LectureResponseDto.builder()
+                        .lectureId(lecture.getId())
                         .semester(lecture.getSemester())
                         .professor(UserResponseDto.builder()
                                 .role(lecture.getProfessor().getRole())
@@ -86,13 +87,12 @@ public class LectureApiController {
                                 .score(lecture.getCourse().getScore())
                                 .createdAt(lecture.getCourse().getCreatedAt())
                                 .build())
-                        .lectureScheduleAndLocation(
+                        .lectureTimeAndLocationId(
                                 lecture.getLectureScheduleList().stream()
-                                        .map(schedule -> Map.of(
-                                                "classTime", schedule.getClassTime().getKey(), // 예: "MON_1"
-                                                "location", schedule.getLectureLocation().getLocation() // 예: "공학관 101호"
+                                        .collect(Collectors.toMap(
+                                                schedule -> schedule.getClassTime().getKey(),      // key
+                                                schedule -> schedule.getLectureLocation().getId()  // value
                                         ))
-                                        .collect(Collectors.toList())
                         )
                         .build()).toList();
         return result;

@@ -7,4 +7,6 @@ import java.util.List;
 public interface LectureLocationQueryService {
 
     List<LectureLocation> getAllLectureLocation();
+
+    LectureLocation getLectureLocationById(Long lectureLocationId);
 }

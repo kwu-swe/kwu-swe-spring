@@ -9,9 +9,14 @@ import com.kwu.swe.domain.user.service.UserCommandService;
 import com.kwu.swe.domain.user.service.UserQueryService;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -30,17 +35,18 @@ public class UserApiController {
     }
 
     @PatchMapping
-    public ApiResponseDto<Long> updateUserInfo(@RequestParam String code,
+    public ApiResponseDto<Long> updateUserInfo(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
                                                @RequestBody EditUserInfoRequestDto dto) {
+        log.info("userDetails.username : {}", userDetails.getUsername());
         return ApiResponseDto.onSuccess(
                 userCommandService.updateUserInfo(
-                        code,
+                        userDetails.getUsername(),
                         dto));
     }
 
     @GetMapping
-    public ApiResponseDto<UserResponseDto> getUserInfo(@RequestParam String code) {
-        User user = userQueryService.getUserInfo(code);
+    public ApiResponseDto<UserResponseDto> getUserInfo(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userQueryService.getUserInfo(userDetails.getUsername());
         UserResponseDto result = UserResponseDto.builder()
                 .phoneNumber(user.getPhoneNumber())
                 .code(user.getCode())

@@ -8,7 +8,10 @@ import com.kwu.swe.domain.lecture.service.LectureCommandService;
 import com.kwu.swe.domain.lecture.service.LectureQueryService;
 import com.kwu.swe.domain.user.dto.UserResponseDto;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,9 +28,9 @@ public class LectureApiController {
     private final LectureQueryService lectureQueryService;
 
     @PostMapping
-    public ApiResponseDto<Long> registerLecture(@RequestParam String code,
+    public ApiResponseDto<Long> registerLecture(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
                                                 @RequestBody RegisterLectureRequestDto dto) {
-        return ApiResponseDto.onSuccess(lectureCommandService.registerLecture(code, dto));
+        return ApiResponseDto.onSuccess(lectureCommandService.registerLecture(userDetails.getUsername(), dto));
     }
 
     @GetMapping
@@ -37,32 +40,34 @@ public class LectureApiController {
     }
 
     @GetMapping("/students")
-    public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(@RequestParam String code) {
-        List<Lecture> studentLectures = lectureQueryService.getStudentLectures(code);
+    public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        List<Lecture> studentLectures = lectureQueryService.getStudentLectures(userDetails.getUsername());
         return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures));
     }
 
     @PostMapping("/{lectureId}")
     public ApiResponseDto<Long> registerCourse(@PathVariable Long lectureId,
-                                               @RequestParam String code) {
+                                               @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponseDto.onSuccess(
                 lectureCommandService.registerCourse(
-                        code,
+                        userDetails.getUsername(),
                         lectureId));
     }
 
-    @PostMapping("/{lectureId}/assistants/{assistantCode}")
-    public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
-                                                  @PathVariable String assistantCode,
-                                                  @RequestParam String professorCode) {
-        return ApiResponseDto.onSuccess(
-                lectureCommandService.registerAssistantOfLecture(
-                        professorCode,
-                        assistantCode,
-                        lectureId
-                )
-        );
-    }
+//    @PostMapping("/{lectureId}/assistants/{assistantCode}")
+//    public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
+//                                                  @PathVariable String assistantCode,
+//                                                  @RequestParam String professorCode) {
+//        return ApiResponseDto.onSuccess(
+//                lectureCommandService.registerAssistantOfLecture(
+//                        professorCode,
+//                        assistantCode,
+//                        lectureId
+//                )
+//        );
+//    }
 
     private static List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures) {
         List<LectureResponseDto> result = allLectures.stream()

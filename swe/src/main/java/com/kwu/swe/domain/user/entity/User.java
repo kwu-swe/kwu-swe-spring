@@ -5,13 +5,19 @@ import com.kwu.swe.domain.user.dto.EditUserInfoRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User extends BaseTimeEntity {
+public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +41,15 @@ public class User extends BaseTimeEntity {
     public void updateInfo(EditUserInfoRequestDto dto) {
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(this.role.getKey()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.code;
     }
 }

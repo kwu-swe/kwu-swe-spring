@@ -1,9 +1,12 @@
 package com.kwu.swe.domain.assignment.entity;
 
+import com.kwu.swe.domain.lecture.entity.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +28,17 @@ public class Assignment {
 
     @Column(nullable = false)
     private LocalDateTime dueDate;  // 마감일
+
+    @Builder.Default
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AssignmentFile> files = new ArrayList<>(); // 파일 목록
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = false)   // lecture 테이블과 연결
+    private Lecture lecture;           // 해당 과제가 속한 강의
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

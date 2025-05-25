@@ -8,7 +8,10 @@ import com.kwu.swe.domain.material.entity.Material;
 import com.kwu.swe.domain.material.service.MaterialCommandService;
 import com.kwu.swe.domain.material.service.MaterialQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +26,9 @@ public class MaterialApiController {
 
     @PostMapping("/lectures/{lectureId}")
     public ApiResponseDto<Long> registerMaterial(@PathVariable Long lectureId,
-                                                 @RequestParam String code,
+                                                 @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody MaterialRequestDto materialRequestDto) {
-        return ApiResponseDto.onSuccess(materialCommandService.registerMaterial(lectureId, code, materialRequestDto));
+        return ApiResponseDto.onSuccess(materialCommandService.registerMaterial(lectureId, userDetails.getUsername(), materialRequestDto));
     }
 
     @GetMapping("/lectures/{lectureId}")

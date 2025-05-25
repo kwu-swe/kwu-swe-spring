@@ -7,7 +7,11 @@ import com.kwu.swe.domain.announcement.entity.Announcement;
 import com.kwu.swe.domain.announcement.service.AnnouncementCommandService;
 import com.kwu.swe.domain.announcement.service.AnnouncementQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +26,9 @@ public class AnnouncementApiController {
 
     @PostMapping("/lectures/{lectureId}")
     public ApiResponseDto<Long> registerAnnouncement(@PathVariable Long lectureId,
-                                                     @RequestParam String code,
+                                                     @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
                                                      @RequestBody AnnouncementRequestDto announcementRequestDto) {
-        return ApiResponseDto.onSuccess(announcementCommandService.registerAnnouncement(lectureId, code, announcementRequestDto));
+        return ApiResponseDto.onSuccess(announcementCommandService.registerAnnouncement(lectureId, userDetails.getUsername(), announcementRequestDto));
     }
 
     @GetMapping("/lectures/{lectureId}")

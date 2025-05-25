@@ -19,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -52,6 +53,7 @@ public class TokenServiceImpl implements TokenService{
         return generateToken(authentication);
     }
 
+    @Transactional
     @Override
     public JwtToken issueTokens(String refreshToken) {
         // Refresh Token 유효성 검사
@@ -160,6 +162,7 @@ public class TokenServiceImpl implements TokenService{
         }
     }
 
+    @Transactional
     @Override
     public boolean logout(String refreshToken) {
         refreshTokenRepository.deleteByValue(refreshToken);

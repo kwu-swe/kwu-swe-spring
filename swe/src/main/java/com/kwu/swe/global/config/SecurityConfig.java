@@ -100,9 +100,9 @@ public class SecurityConfig {
 
     private RequestMatcher[] permitRequest() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher("/api/courses"),
+                antMatcher("/api/courses/**"),
                 antMatcher("/api/images"),
-                antMatcher("/api/locations"),
+                antMatcher("/api/locations/**"),
                 antMatcher(HttpMethod.POST, "/api/users"),
                 antMatcher("/api/tokens/**")
         );

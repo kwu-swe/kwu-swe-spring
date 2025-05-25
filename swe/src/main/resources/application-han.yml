@@ -19,3 +19,7 @@ spring:
           location: classpath:kwuswe-6763a1fdf6bd.json
         project-id: kwuswe
         bucket: kwu-swe-bucket
+
+app:
+  jwt:
+    secret: 974917864584aa4a0abb4016bf7d03d7ce60f812e110f2eb06a05f03cf991515

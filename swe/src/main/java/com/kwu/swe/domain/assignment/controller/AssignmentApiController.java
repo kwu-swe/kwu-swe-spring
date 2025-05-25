@@ -41,6 +41,7 @@ public class AssignmentApiController {
         // List<Assignment>을 List<AssignmentResponseDto>로 변환
         List<AllAssignmentResponseDto> responseDtos = assignments.stream()
                 .map(assignment -> AllAssignmentResponseDto.builder()
+                        .assignmentId(assignment.getId())
                         .title(assignment.getTitle())
                         .dueDate(assignment.getDueDate())
                         .build())

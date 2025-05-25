@@ -4,6 +4,8 @@ import com.kwu.swe.domain.assignment.dto.AssignmentResponseDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.user.repository.UserRepository;
+import com.kwu.swe.presentation.payload.code.ErrorStatus;
+import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class AssignmentQueryServiceImpl implements AssignmentQueryService {
 
     @Override
     public Assignment findByAssignmentId(Long assignmentId) {
-        return assignmentRepository.findById(assignmentId).orElseThrow(RuntimeException::new);
+        return assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
     }
 }

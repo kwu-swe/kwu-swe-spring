@@ -64,6 +64,7 @@ public class SecurityConfig {
                             .requestMatchers("/ws/**", "/subscribe/**", "/publish/**").permitAll()
                             .requestMatchers("/", "/.well-known/**", "/css/**", "/*.ico", "/error", "/images/**").permitAll()
                             .requestMatchers(permitAllRequest()).permitAll()
+                            .requestMatchers(permitRequest()).permitAll()
                             .requestMatchers(additionalSwaggerRequests()).permitAll()
                             .anyRequest().authenticated();
                 });
@@ -102,7 +103,8 @@ public class SecurityConfig {
                 antMatcher("/api/courses"),
                 antMatcher("/api/images"),
                 antMatcher("/api/locations"),
-                antMatcher(HttpMethod.POST, "/api/users")
+                antMatcher(HttpMethod.POST, "/api/users"),
+                antMatcher("/api/tokens/**")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }

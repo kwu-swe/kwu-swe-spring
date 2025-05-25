@@ -26,5 +26,5 @@ public class LectureResponseDto {
     private UserResponseDto professor;
     private CourseResponseDto courseResponseDto;
     @Builder.Default
-    private Map<String, String> lectureTimeAndLocationId = new HashMap<>();
+    private Map<String, Long> lectureTimeAndLocationId = new HashMap<>();
 }

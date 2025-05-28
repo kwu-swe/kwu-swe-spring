@@ -1,5 +1,6 @@
 package com.kwu.swe.presentation.advice;
 
+import com.kwu.swe.global.config.LocalOnlyDiscordNotifier;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.code.Reason;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
@@ -7,6 +8,7 @@ import com.kwu.swe.presentation.payload.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,8 +26,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Hidden
+@RequiredArgsConstructor
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+
+    private final Optional<LocalOnlyDiscordNotifier> localNotifier;
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -57,7 +62,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
-
+        localNotifier.ifPresent(localOnlyDiscordNotifier -> localOnlyDiscordNotifier.sendDiscordAlarm(e, request));
         return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
                 ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
     }

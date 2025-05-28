@@ -53,6 +53,26 @@ public class User extends BaseTimeEntity implements UserDetails {
         return this.code;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     public void updatePassword(String password) {
         this.password = password;
     }

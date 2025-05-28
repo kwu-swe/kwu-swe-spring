@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-@Profile({"prod", "han"})
+@Profile({"prod"})
 @RequiredArgsConstructor
 public class LocalOnlyDiscordNotifier {
 

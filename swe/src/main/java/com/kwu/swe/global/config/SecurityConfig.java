@@ -1,6 +1,8 @@
 package com.kwu.swe.global.config;
 
+import com.kwu.swe.security.exception.JwtAuthenticationEntryPoint;
 import com.kwu.swe.security.filter.JwtAuthenticationFilter;
+import com.kwu.swe.security.filter.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +28,14 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         configureCorsAndSecurity(httpSecurity);
         configureAuth(httpSecurity);
+        configureExceptionHandling(httpSecurity);
         addFilter(httpSecurity);
 
         return httpSecurity.build();
@@ -72,7 +77,14 @@ public class SecurityConfig {
 
     private void addFilter(HttpSecurity httpSecurity) {
         httpSecurity
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+    }
+
+    private void configureExceptionHandling(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint));
     }
 
     private RequestMatcher[] permitAllRequest() {

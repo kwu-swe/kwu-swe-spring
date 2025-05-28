@@ -7,9 +7,12 @@ import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.service.AssignmentCommandService;
 import com.kwu.swe.domain.assignment.service.AssignmentQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +28,10 @@ public class AssignmentApiController {
 
     // 과제 생성
     @PostMapping("/lectures/{lectureId}")
-    public ApiResponseDto<String> createAssignment(@RequestBody AssignmentRequestDto assignmentRequestDto,
+    public ApiResponseDto<String> createAssignment(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+                                                   @RequestBody AssignmentRequestDto assignmentRequestDto,
                                                    @PathVariable Long lectureId) {
-        Long assignmentId = assignmentService.createAssignment(assignmentRequestDto, lectureId);
+        Long assignmentId = assignmentService.createAssignment(assignmentRequestDto, userDetails.getUsername(), lectureId);
 
         return ApiResponseDto.onSuccess("과제가 성공적으로 생성되었습니다. 과제 ID: " + assignmentId);
     }

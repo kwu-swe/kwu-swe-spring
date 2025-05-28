@@ -4,13 +4,17 @@ import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.entity.AssignmentFile;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
+import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.entity.SubmissionFile;
 import com.kwu.swe.domain.submission.entity.SubmissionStatus;
 import com.kwu.swe.domain.submission.repository.SubmissionFileRepository;
 import com.kwu.swe.domain.submission.repository.SubmissionRepository;
+import com.kwu.swe.domain.user.entity.LectureStudent;
+import com.kwu.swe.domain.user.entity.Role;
 import com.kwu.swe.domain.user.entity.User;
+import com.kwu.swe.domain.user.repository.LectureStudentRepository;
 import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
@@ -31,23 +35,33 @@ public class SubmissionCommandServiceImpl implements SubmissionCommandService {
     private final SubmissionFileRepository submissionFileRepository;
     private final PathMatcher pathMatcher;
     private final UserRepository userRepository;
+    private final LectureStudentRepository lectureStudentRepository;
 
     //TODO C, U 기능은 Long type으로 반환
     @Override
-    public Long submitSubmissionAndUpdateStatus(Long assignmentId, Long userId ,SubmitAssignmentRequestDto submitAssignmentRequestDto) {
+    public Long submitSubmissionAndUpdateStatus(Long assignmentId, String code, SubmitAssignmentRequestDto submitAssignmentRequestDto) {
 
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
 
-        User user = userRepository.findById(userId)
+        // code로부터 사용자 조회
+        User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        if (!user.getRole().equals(Role.ROLE_STUDENT)) {
+            throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_STUDENT);
+        }
+
+        if(!lectureStudentRepository.existsByLectureAndStudent(assignment.getLecture(), user)){
+            throw new GeneralException(ErrorStatus.USER_NOT_ENROLLED_IN_LECTURE);
+        }
 
         // 제출일과 과제의 마감일을 비교
         LocalDateTime currentTime = LocalDateTime.now(); // 현재 날짜
         LocalDateTime dueDate = assignment.getDueDate(); // 과제의 마감일
 
         if(currentTime.isAfter(dueDate)) {
-            throw new IllegalArgumentException("마감일이 지난 과제는 제출할 수 없습니다.");
+            throw new GeneralException(ErrorStatus.DEADLINE_OVER);
         }
 
         // 제출할 과제에 대한 Submission 객체 생성

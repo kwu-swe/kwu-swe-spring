@@ -3,9 +3,14 @@ package com.kwu.swe.domain.assignment.controller;
 import com.kwu.swe.domain.assignment.dto.AllAssignmentResponseDto;
 import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
 import com.kwu.swe.domain.assignment.dto.AssignmentResponseDto;
+import com.kwu.swe.domain.assignment.dto.AssignmentWithSubmissionResponseDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.assignment.service.AssignmentCommandService;
 import com.kwu.swe.domain.assignment.service.AssignmentQueryService;
+import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
+import com.kwu.swe.domain.submission.entity.Submission;
+import com.kwu.swe.domain.submission.service.SubmissionQueryService;
+import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +30,7 @@ public class AssignmentApiController {
 
     private final AssignmentCommandService assignmentService;
     private final AssignmentQueryService assignmentQueryService;
+    private final SubmissionQueryService submissionQueryService;
 
     // 과제 생성
     @PostMapping("/lectures/{lectureId}")
@@ -54,22 +60,42 @@ public class AssignmentApiController {
         return ApiResponseDto.onSuccess(responseDtos);
     }
 
-
+    /**
+     * 1. userdetails 받아오기
+     * 2. service return -> submission
+     */
     // 특정 assignmentId에 대한 Assignment 조회
     @GetMapping("/{assignmentId}")
-    public ApiResponseDto<AssignmentResponseDto> getAssignmentByLectureIdAndAssignmentId(
+    public ApiResponseDto<AssignmentWithSubmissionResponseDto> getAssignmentByLectureIdAndAssignmentId(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long assignmentId) {
 
         // assignmentId에 해당하는 Assignment 조회
-            Assignment assignment = assignmentQueryService.findByAssignmentId(assignmentId);
+        Assignment assignment = assignmentQueryService.findByAssignmentId(assignmentId);
 
-        AssignmentResponseDto responseDto = AssignmentResponseDto.builder()
+        Submission submittedSubmission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
+
+        // Submission -> SubmissionResponseDto로 변환
+        SubmitAssignmentResponseDto submissionResponseDto = SubmitAssignmentResponseDto.builder()
+                .submissionId(submittedSubmission.getId())
+                .submissionId(submittedSubmission.getId())
+                .title(submittedSubmission.getTitle())
+                .content(submittedSubmission.getContent())
+                .encodedFiles(submittedSubmission.getFiles().stream()
+                        .map(submissionFile -> submissionFile.getEncodedURL())
+                        .toList())
+                .build();
+
+        AssignmentWithSubmissionResponseDto responseDto = AssignmentWithSubmissionResponseDto.builder()
+                .assignmentId(assignment.getId())
                 .title(assignment.getTitle())
                 .content(assignment.getContent())
                 .dueDate(assignment.getDueDate())
+                .createdAt(assignment.getCreatedAt())
                 .encodedFiles(assignment.getFiles().stream()
                         .map(assignmentFile -> assignmentFile.getEncodedURL())
                         .toList())
+                .submitAssignmentResponseDto(submissionResponseDto)
                 .build();
 
             return ApiResponseDto.onSuccess(responseDto);

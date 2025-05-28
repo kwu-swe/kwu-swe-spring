@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SubmissionCommandService {
 
-    Long submitSubmissionAndUpdateStatus(Long userId, Long assignmentId, SubmitAssignmentRequestDto submitAssignmentRequestDto);
+    Long submitSubmissionAndUpdateStatus(Long assignmentId, String code, SubmitAssignmentRequestDto submitAssignmentRequestDto);
 
     Long updateSubmission(Long submissionId, SubmitAssignmentRequestDto submitAssignmentRequestDto);
 

@@ -7,7 +7,10 @@ import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
 import com.kwu.swe.domain.submission.service.SubmissionQueryService;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,23 +24,23 @@ public class SubmissionApiController {
     private final SubmissionQueryService submissionQueryService;
     private final AssignmentRepository assignmentRepository;
 
-    @PostMapping(value = "/assignments/{assignmentId}/users/{userId}")
+    @PostMapping(value = "/assignments/{assignmentId}")
     public ApiResponseDto<String> submitAssignment(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long assignmentId,
-            @PathVariable Long userId,
             @RequestBody SubmitAssignmentRequestDto submitAssignmentRequestDto){
 
-        Long submissionId = submissionCommandService.submitSubmissionAndUpdateStatus(assignmentId, userId, submitAssignmentRequestDto);
+        Long submissionId = submissionCommandService.submitSubmissionAndUpdateStatus(assignmentId, userDetails.getUsername(), submitAssignmentRequestDto);
 
         return ApiResponseDto.onSuccess("과제가 성공적으로 제출되었습니다. 과제 ID: " + submissionId);
     }
 
-    @GetMapping("/assignments/{assignmentId}/users/{userId}")
+    @GetMapping("/assignments/{assignmentId}")
     public ApiResponseDto<SubmitAssignmentResponseDto> getSubmissions(
             @PathVariable Long assignmentId,
-            @PathVariable Long userId) throws IOException {  // IOException을 처리
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) throws IOException {  // IOException을 처리
 
-        Submission submittedSubmission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userId);
+        Submission submittedSubmission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
 
         // Submission -> SubmissionResponseDto로 변환
         SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()

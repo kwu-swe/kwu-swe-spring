@@ -25,4 +25,4 @@ app:
 
 discord:
   webhook:
-    url: {DISCORD_WEB_HOOK}
+    url: https://discord.com/api/webhooks/1377258188327489536/OSXljQfZVgpIBuW6cKJmG0Ge2BXD-kGMhhDvIFV-xz761tyro0ZCfyAyrMx55RxblhMv

@@ -5,7 +5,7 @@ import com.kwu.swe.domain.refresh.repository.RefreshTokenRepository;
 import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.service.UserQueryService;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
-import com.kwu.swe.presentation.payload.exception.GeneralException;
+import com.kwu.swe.presentation.payload.exception.JwtAuthenticationException;
 import com.kwu.swe.security.jwt.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,22 +33,30 @@ import java.util.stream.Collectors;
 public class TokenServiceImpl implements TokenService{
     private final Key key;      //security yml 파일 생성 후 app.jwt.secret에 값 넣어주기(보안을 위해 따로 연락주세요)
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final PasswordEncoder passwordEncoder;
     private final UserQueryService userQueryService;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenServiceImpl(@Value("${app.jwt.secret}") String key,
                             AuthenticationManagerBuilder authenticationManagerBuilder,
+                            PasswordEncoder passwordEncoder,
                             UserQueryService userQueryService,
                             RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(key);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.passwordEncoder = passwordEncoder;
         this.userQueryService = userQueryService;
         this.refreshTokenRepository = refreshTokenRepository;
     }
     @Override       //TODO oauth2적용시 필요 없음
-    public JwtToken login(String code) {
+    public JwtToken login(String code, String password) {
         User user = userQueryService.getUserInfo(code);
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_MISMATCH_PASSWORD);
+        }
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, "",
                 user.getAuthorities());
         return generateToken(authentication);
@@ -58,7 +67,7 @@ public class TokenServiceImpl implements TokenService{
     public JwtToken issueTokens(String refreshToken) {
         // Refresh Token 유효성 검사
         if (!validateToken(refreshToken) || !existsRefreshToken(refreshToken)) {
-            throw new GeneralException(ErrorStatus.AUTH_INVALID_REFRESH_TOKEN);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_INVALID_REFRESH_TOKEN);
         }
 
         // 이전 리프레시 토큰 삭제
@@ -125,7 +134,7 @@ public class TokenServiceImpl implements TokenService{
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new GeneralException(ErrorStatus.AUTH_INVALID_TOKEN);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_INVALID_TOKEN);
         }
 
         // 클레임에서 권한 정보 가져오기
@@ -149,16 +158,16 @@ public class TokenServiceImpl implements TokenService{
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
-            throw new GeneralException(ErrorStatus.AUTH_INVALID_TOKEN);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
-            throw new GeneralException(ErrorStatus.AUTH_TOKEN_HAS_EXPIRED);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_TOKEN_HAS_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
-            throw new GeneralException(ErrorStatus.AUTH_TOKEN_IS_UNSUPPORTED);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_TOKEN_IS_UNSUPPORTED);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
-            throw new GeneralException(ErrorStatus.AUTH_IS_NULL);
+            throw new JwtAuthenticationException(ErrorStatus.AUTH_IS_NULL);
         }
     }
 
@@ -185,7 +194,7 @@ public class TokenServiceImpl implements TokenService{
 
             return claims.getExpiration();
         } catch (JwtException exception) {
-            throw new GeneralException(ErrorStatus._INTERNAL_SERVER_ERROR);
+            throw new JwtAuthenticationException(ErrorStatus._INTERNAL_SERVER_ERROR);
         }
     }
 

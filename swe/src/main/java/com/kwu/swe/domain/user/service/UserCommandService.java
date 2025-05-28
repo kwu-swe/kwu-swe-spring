@@ -9,4 +9,8 @@ public interface UserCommandService {
     Long registerUser(RegisterUserRequestDto dto, Role role);
 
     Long updateUserInfo(String code, EditUserInfoRequestDto dto);
+
+    Long updatePassword(String code, String password);
+
+
 }

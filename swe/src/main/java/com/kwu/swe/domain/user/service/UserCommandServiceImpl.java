@@ -15,6 +15,7 @@ import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandServiceImpl implements UserCommandService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long registerUser(RegisterUserRequestDto dto, Role role) {
         User user = User.builder()
                 .name(dto.getName())
-                .password(dto.getPassword())
+                .password(passwordEncoder.encode(dto.getPassword()))
                 .code(dto.getCode())
                 .phoneNumber(dto.getPhoneNumber())
                 .role(role)
@@ -42,9 +44,17 @@ public class UserCommandServiceImpl implements UserCommandService{
         User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        user.updateInfo(dto);
+        user.updateInfo(passwordEncoder.encode(dto.getPassword()), dto.getPhoneNumber());
         return user.getId();
     }
 
+    @Override
+    public Long updatePassword(String code, String password) {
+        User user = userRepository.findUserByCode(code)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        user.updatePassword(passwordEncoder.encode(password));
+        return user.getId();
+    }
 
 }

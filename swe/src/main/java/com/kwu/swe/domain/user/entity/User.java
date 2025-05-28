@@ -38,9 +38,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     private Role role;
 
 
-    public void updateInfo(EditUserInfoRequestDto dto) {
-        this.password = dto.getPassword();
-        this.phoneNumber = dto.getPhoneNumber();
+    public void updateInfo(String password, String phoneNumber) {
+        this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -51,5 +51,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public String getUsername() {
         return this.code;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }

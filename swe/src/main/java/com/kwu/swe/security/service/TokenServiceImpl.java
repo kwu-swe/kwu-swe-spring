@@ -96,7 +96,7 @@ public class TokenServiceImpl implements TokenService{
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 1800000);   // 30분
+        Date accessTokenExpiresIn = new Date(now + 604800000);   // 30분
         log.info("date = {}", accessTokenExpiresIn);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())

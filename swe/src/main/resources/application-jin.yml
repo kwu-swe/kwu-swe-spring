@@ -22,3 +22,7 @@ spring:
           location: classpath:kwuswe-c81a66f3e35d.json
         project-id: kwuswe
         bucket: kwu-swe-bucket
+
+discord:
+  webhook:
+    url: null

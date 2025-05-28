@@ -25,7 +25,7 @@ public class TokenApiController {
         return ApiResponseDto.onSuccess("logout");
     }
 
-    @PutMapping("/re-issue")
+    @PatchMapping("/re-issue")
     public ApiResponseDto<JwtToken> refresh(@RequestParam String refreshToken) {
         return ApiResponseDto.onSuccess(tokenService.issueTokens(refreshToken));
     }

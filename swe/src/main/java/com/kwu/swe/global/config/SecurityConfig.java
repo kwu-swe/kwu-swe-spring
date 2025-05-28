@@ -104,6 +104,7 @@ public class SecurityConfig {
                 antMatcher("/api/images"),
                 antMatcher("/api/locations/**"),
                 antMatcher(HttpMethod.POST, "/api/users"),
+                antMatcher(HttpMethod.PATCH, "/api/users/password"),
                 antMatcher("/api/tokens/**")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);

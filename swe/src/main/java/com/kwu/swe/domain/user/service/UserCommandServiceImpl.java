@@ -44,7 +44,16 @@ public class UserCommandServiceImpl implements UserCommandService{
         User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        user.updateInfo(dto);
+        user.updateInfo(passwordEncoder.encode(dto.getPassword()), dto.getPhoneNumber());
+        return user.getId();
+    }
+
+    @Override
+    public Long updatePassword(String code, String password) {
+        User user = userRepository.findUserByCode(code)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        user.updatePassword(passwordEncoder.encode(password));
         return user.getId();
     }
 

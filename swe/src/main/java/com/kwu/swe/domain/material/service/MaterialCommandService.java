@@ -6,4 +6,6 @@ import com.kwu.swe.domain.material.dto.MaterialRequestDto;
 public interface MaterialCommandService {
 
     Long registerMaterial(Long lectureId, String code, MaterialRequestDto materialRequestDto);
+
+    void deleteMaterial(Long materialId);
 }

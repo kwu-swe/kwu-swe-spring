@@ -1,6 +1,7 @@
 package com.kwu.swe.domain.material.service;
 
 
+import com.kwu.swe.domain.assignment.entity.Assignment;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
 import com.kwu.swe.domain.material.dto.MaterialRequestDto;
@@ -57,5 +58,12 @@ public class MaterialCommandServiceImpl implements MaterialCommandService{
         );
         materialFileRepository.saveAll(files);
         return build.getId();
+    }
+
+    public void deleteMaterial(Long materialId) {
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MATERIAL_NOT_FOUND));
+
+        materialRepository.delete(material);
     }
 }

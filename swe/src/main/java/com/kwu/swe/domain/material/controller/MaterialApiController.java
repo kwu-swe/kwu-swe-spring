@@ -61,4 +61,10 @@ public class MaterialApiController {
                 .build();
         return ApiResponseDto.onSuccess(build);
     }
+
+    @DeleteMapping("/{materialId}")
+    public ApiResponseDto<Void> deleteMaterial(@PathVariable Long materialId) {
+        materialCommandService.deleteMaterial(materialId);
+        return ApiResponseDto.onSuccess(null);
+    }
 }

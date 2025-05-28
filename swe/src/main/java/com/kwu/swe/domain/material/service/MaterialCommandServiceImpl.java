@@ -1,7 +1,9 @@
 package com.kwu.swe.domain.material.service;
 
 
+import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
 import com.kwu.swe.domain.assignment.entity.Assignment;
+import com.kwu.swe.domain.assignment.entity.AssignmentFile;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
 import com.kwu.swe.domain.material.dto.MaterialRequestDto;
@@ -58,6 +60,28 @@ public class MaterialCommandServiceImpl implements MaterialCommandService{
         );
         materialFileRepository.saveAll(files);
         return build.getId();
+    }
+
+    public Long updateMaterial(Long materialId, MaterialRequestDto materialRequestDto) {
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MATERIAL_NOT_FOUND));
+
+        material.update(materialRequestDto.getTitle(), materialRequestDto.getContent());
+
+        materialFileRepository.deleteByMaterial(material);
+
+        for (int i = 0; i < materialRequestDto.getEncodedFiles().size(); i++) {
+            String encodedResult = materialRequestDto.getEncodedFiles().get(i);
+
+            MaterialFile materialFile = MaterialFile.builder()
+                    .encodedURL(encodedResult)
+                    .material(material)  // 연결된 Assignment 설정
+                    .build();
+
+            materialFileRepository.save(materialFile);
+        }
+
+        return material.getId();
     }
 
     public void deleteMaterial(Long materialId) {

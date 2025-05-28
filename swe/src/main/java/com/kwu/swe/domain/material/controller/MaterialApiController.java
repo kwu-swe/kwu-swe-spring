@@ -1,5 +1,6 @@
 package com.kwu.swe.domain.material.controller;
 
+import com.kwu.swe.domain.assignment.dto.AssignmentRequestDto;
 import com.kwu.swe.domain.material.dto.MaterialRequestDto;
 import com.kwu.swe.domain.material.dto.MaterialResponseDto;
 import com.kwu.swe.domain.material.dto.MaterialSummaryDto;
@@ -60,6 +61,14 @@ public class MaterialApiController {
                 .title(specificmaterial.getTitle())
                 .build();
         return ApiResponseDto.onSuccess(build);
+    }
+
+    @PutMapping("/{materialId}")
+    public ApiResponseDto<Long> updateMaterial(
+            @PathVariable Long materialId,
+            @RequestBody MaterialRequestDto materialRequestDto) {
+
+        return ApiResponseDto.onSuccess(materialCommandService.updateMaterial(materialId, materialRequestDto));
     }
 
     @DeleteMapping("/{materialId}")

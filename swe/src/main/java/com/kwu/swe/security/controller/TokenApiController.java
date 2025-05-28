@@ -14,8 +14,9 @@ public class TokenApiController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ApiResponseDto<JwtToken> login(@RequestParam String code) {
-        return ApiResponseDto.onSuccess(tokenService.login(code));
+    public ApiResponseDto<JwtToken> login(@RequestParam String code,
+                                          @RequestParam String password) {
+        return ApiResponseDto.onSuccess(tokenService.login(code, password));
     }
 
     @DeleteMapping("/logout")

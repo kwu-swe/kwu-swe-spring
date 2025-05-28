@@ -28,6 +28,7 @@ public enum ErrorStatus implements BaseCode{
     AUTH_OAUTH2_EMAIL_NOT_FOUND_FROM_PROVIDER(NOT_FOUND, 4056, "해당 이메일은 카카오 계정 이메일로 존재하지 않습니다."),
     AUTH_MUST_AUTHORIZED_URI(BAD_REQUEST, 4057, "인증이 필수인 uri입니다."),
     AUTH_ROLE_CANNOT_EXECUTE_URI(BAD_REQUEST,4058, "해당 인가로는 실행할 수 없는 동작입니다."),
+    AUTH_MISMATCH_PASSWORD(BAD_REQUEST, 4059, "잘못된 패스워드입니다."),
 
     //강의 관련 오류(4100 ~ 4149)
     LECTURE_NOT_FOUND(NOT_FOUND, 4100, "해당 강의를 찾을 수 없습니다."),
@@ -47,6 +48,7 @@ public enum ErrorStatus implements BaseCode{
     SUBMISSION_NOT_FOUND(NOT_FOUND, 4350,"해당 제출은 찾을 수 없습니다" ),
     ANNOUNCEMENT_NOT_FOUND(NOT_FOUND, 4300, "해당 공지사항은 찾을 수 없습니다."),
     MATERIAL_NOT_FOUND(NOT_FOUND, 4400, "해당 강의 자료는 찾을 수 없습니다.");
+
 
 
 

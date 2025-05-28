@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,22 +33,30 @@ import java.util.stream.Collectors;
 public class TokenServiceImpl implements TokenService{
     private final Key key;      //security yml 파일 생성 후 app.jwt.secret에 값 넣어주기(보안을 위해 따로 연락주세요)
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final PasswordEncoder passwordEncoder;
     private final UserQueryService userQueryService;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenServiceImpl(@Value("${app.jwt.secret}") String key,
                             AuthenticationManagerBuilder authenticationManagerBuilder,
+                            PasswordEncoder passwordEncoder,
                             UserQueryService userQueryService,
                             RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(key);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.passwordEncoder = passwordEncoder;
         this.userQueryService = userQueryService;
         this.refreshTokenRepository = refreshTokenRepository;
     }
     @Override       //TODO oauth2적용시 필요 없음
-    public JwtToken login(String code) {
+    public JwtToken login(String code, String password) {
         User user = userQueryService.getUserInfo(code);
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new GeneralException(ErrorStatus.AUTH_MISMATCH_PASSWORD);
+        }
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, "",
                 user.getAuthorities());
         return generateToken(authentication);

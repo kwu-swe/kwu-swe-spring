@@ -56,4 +56,10 @@ public class UserApiController {
         return ApiResponseDto.onSuccess(result);
     }
 
+    @PatchMapping("/password")
+    public ApiResponseDto<Long> editOnlyPassword(@RequestParam String code,
+                                                 @RequestParam String password) {
+        return ApiResponseDto.onSuccess(userCommandService.updatePassword(code, password));
+    }
+
 }

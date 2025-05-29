@@ -22,3 +22,7 @@ spring:
 app:
   jwt:
     secret: 24d0e5c46861a72956f4ba9ada412119b19cbedc2e42f9efb36b456ade7db8de
+
+discord:
+  webhook:
+    url: https://discord.com/api/webhooks/1377258188327489536/OSXljQfZVgpIBuW6cKJmG0Ge2BXD-kGMhhDvIFV-xz761tyro0ZCfyAyrMx55RxblhMv

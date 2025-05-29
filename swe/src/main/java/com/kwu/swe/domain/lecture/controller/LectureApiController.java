@@ -92,7 +92,7 @@ public class LectureApiController {
                                 .score(lecture.getCourse().getScore())
                                 .createdAt(lecture.getCourse().getCreatedAt())
                                 .build())
-                        .lectureTimeAndLocationId(
+                        .lectureTimeAndLocation(
                                 lecture.getLectureScheduleList().stream()
                                         .collect(Collectors.toMap(
                                                 schedule -> schedule.getClassTime().getKey(),      // key

@@ -26,3 +26,8 @@ spring:
 app:
   jwt:
     secret: 974917864584aa4a0abb4016bf7d03d7ce60f812e110f2eb06a05f03cf991515
+
+discord:
+  webhook:
+    url: null
+

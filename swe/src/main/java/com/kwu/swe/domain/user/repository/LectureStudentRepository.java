@@ -10,7 +10,5 @@ import java.util.List;
 public interface LectureStudentRepository extends JpaRepository<LectureStudent, Long> {
     List<LectureStudent> findByStudent(User student);
 
-    User lecture(Lecture lecture);
-
     boolean existsByLectureAndStudent(Lecture lecture, User user);
 }

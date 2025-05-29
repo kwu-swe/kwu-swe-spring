@@ -44,6 +44,7 @@ public class AnnouncementApiController {
         return ApiResponseDto.onSuccess(result);
     }
 
+
     @GetMapping("/{announcementId}")
     public ApiResponseDto<AnnouncementResponseDto> getSpecificAnnouncement(@PathVariable Long announcementId) {
         Announcement specificAnnouncement = announcementQueryService.getSpecificAnnouncement(announcementId);

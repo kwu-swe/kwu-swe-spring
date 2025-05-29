@@ -5,5 +5,5 @@ import com.kwu.swe.domain.submission.entity.Submission;
 
 public interface SubmissionQueryService {
 
-    Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, Long userId);
+    Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, String code);
 }

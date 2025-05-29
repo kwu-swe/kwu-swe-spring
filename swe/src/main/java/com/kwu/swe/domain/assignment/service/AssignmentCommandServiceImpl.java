@@ -7,6 +7,8 @@ import com.kwu.swe.domain.assignment.repository.AssignmentFileRepository;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
+import com.kwu.swe.domain.user.entity.User;
+import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
 import jakarta.transaction.Transactional;
@@ -24,12 +26,21 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
     private final AssignmentRepository assignmentRepository;
     private final AssignmentFileRepository assignmentFileRepository;
     private final LectureRepository lectureRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public Long createAssignment(AssignmentRequestDto assignmentRequestDto, Long lectureId) {
+    public Long createAssignment(AssignmentRequestDto assignmentRequestDto, String code, Long lectureId) {
         //lecture 조회
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_NOT_FOUND));
+
+        User user  = userRepository.findUserByCode(code)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        // 사용자와 강의의 교수자가 일치하는지 검증
+        if (!lecture.getProfessor().equals(user)) {
+            throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
+        }
 
         // 현재 날짜를 기준으로 마감일 계산
         LocalDateTime currentDate = LocalDateTime.now();

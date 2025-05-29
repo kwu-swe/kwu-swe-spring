@@ -14,6 +14,9 @@ public enum ErrorStatus implements BaseCode{
     _UNAUTHORIZED_LOGIN_DATA_RETRIEVAL_ERROR(INTERNAL_SERVER_ERROR, 5001, "서버 에러, 로그인이 필요없는 요청입니다."),
     _ASSIGNABLE_PARAMETER(BAD_REQUEST, 5002, "인증타입이 잘못되어 할당이 불가능합니다."),
 
+    // 마감 관련 오류
+    DEADLINE_OVER(BAD_REQUEST, 4100, "제출기한이 지났습니다."),
+
     // 일반적인 요청 오류
     _BAD_REQUEST(BAD_REQUEST, 4000, "잘못된 요청입니다."),
     _UNAUTHORIZED(UNAUTHORIZED, 4001, "로그인이 필요합니다."),
@@ -47,7 +50,9 @@ public enum ErrorStatus implements BaseCode{
     ASSIGNMENT_NOT_FOUND(NOT_FOUND, 4350,"해당 과제는 찾을 수 없습니다" ),
     SUBMISSION_NOT_FOUND(NOT_FOUND, 4350,"해당 제출은 찾을 수 없습니다" ),
     ANNOUNCEMENT_NOT_FOUND(NOT_FOUND, 4300, "해당 공지사항은 찾을 수 없습니다."),
-    MATERIAL_NOT_FOUND(NOT_FOUND, 4400, "해당 강의 자료는 찾을 수 없습니다.");
+    MATERIAL_NOT_FOUND(NOT_FOUND, 4400, "해당 강의 자료는 찾을 수 없습니다."),
+
+    USER_NOT_ENROLLED_IN_LECTURE(NOT_FOUND, 4400, "해당 유저는 등록되지 않은 유저입니다.");
 
 
 

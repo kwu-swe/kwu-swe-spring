@@ -78,7 +78,6 @@ public class AssignmentApiController {
         // Submission -> SubmissionResponseDto로 변환
         SubmitAssignmentResponseDto submissionResponseDto = SubmitAssignmentResponseDto.builder()
                 .submissionId(submittedSubmission.getId())
-                .submissionId(submittedSubmission.getId())
                 .title(submittedSubmission.getTitle())
                 .content(submittedSubmission.getContent())
                 .encodedFiles(submittedSubmission.getFiles().stream()

@@ -34,4 +34,9 @@ public class Material extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MaterialFile> materialFileList = new ArrayList<>();
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

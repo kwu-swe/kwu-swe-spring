@@ -62,7 +62,7 @@ public class LectureApiController {
                         lectureId));
     }
 
-    @PostMapping("/{lectureId}/students/{studentId}/grades")
+    @PatchMapping("/{lectureId}/students/{studentId}/grades")
     public ApiResponseDto<Long> assignGrade(@PathVariable Long lectureId,
                                             @PathVariable Long studentId,
                                             @RequestParam String grade,

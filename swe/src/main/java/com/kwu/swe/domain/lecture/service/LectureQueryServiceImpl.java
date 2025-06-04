@@ -49,7 +49,7 @@ public class LectureQueryServiceImpl implements LectureQueryService{
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_NOT_FOUND));
 
-        if (lecture.getProfessor().getId().equals(user.getId())) {
+        if (!lecture.getProfessor().getId().equals(user.getId())) {
             throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_PROFESSOR);
         }
         return lectureStudentRepository.findByLectureProfessorId(lecture.getProfessor().getId());

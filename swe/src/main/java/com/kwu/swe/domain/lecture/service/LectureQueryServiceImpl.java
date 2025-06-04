@@ -10,11 +10,13 @@ import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -31,10 +33,13 @@ public class LectureQueryServiceImpl implements LectureQueryService{
 
     @Override
     public List<Lecture> getStudentLectures(String code) {
+        log.info("user not found");
         User student = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        log.info("user found");
         //TODO validate student
         List<LectureStudent> lectureStudents = lectureStudentRepository.findByStudent(student);
+        log.info("lectureStudents.size() : {}", lectureStudents.size());
 
         return lectureStudents.stream()
                 .map(LectureStudent::getLecture)

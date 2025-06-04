@@ -15,6 +15,7 @@ import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/lectures")
 @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class LectureApiController {
     public ApiResponseDto<List<LectureResponseDto>> getStudentLectureInfo(
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
     ) {
+
         List<Lecture> studentLectures = lectureQueryService.getStudentLectures(userDetails.getUsername());
         return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures, userDetails.getUsername()));
     }
@@ -110,35 +113,41 @@ public class LectureApiController {
 
     private static List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures) {
         List<LectureResponseDto> result = allLectures.stream()
-                .map(lecture -> LectureResponseDto.builder()
-                        .lectureId(lecture.getId())
-                        .semester(lecture.getSemester())
-                        .professor(UserResponseDto.builder()
-                                .role(lecture.getProfessor().getRole())
-                                .name(lecture.getProfessor().getName())
-                                .code(lecture.getProfessor().getCode())
-                                .phoneNumber(lecture.getProfessor().getPhoneNumber())
-                                .createdAt(lecture.getProfessor().getCreatedAt())
-                                .build())
-                        .lectureStatus(lecture.getLectureStatus())
-                        .year(lecture.getYear().getValue())
-                        .sizeLimit(lecture.getSizeLimit())
-                        .createdAt(lecture.getCreatedAt())
-                        .courseResponseDto(CourseResponseDto.builder()
-                                .courseId(lecture.getCourse().getId())
-                                .courseName(lecture.getCourse().getCourseName())
-                                .courseNumber(lecture.getCourse().getCourseNumber())
-                                .score(lecture.getCourse().getScore())
-                                .createdAt(lecture.getCourse().getCreatedAt())
-                                .build())
-                        .lectureTimeAndLocation(
-                                lecture.getLectureScheduleList().stream()
-                                        .collect(Collectors.toMap(
-                                                schedule -> schedule.getClassTime().getKey(),      // key
-                                                schedule -> schedule.getLectureLocation().getId()  // value
-                                        ))
-                        )
-                        .build()).toList();
+                .map(lecture -> {
+                    log.info("lecture.getProfessor = {}", lecture.getProfessor().getCode());
+                    log.info("lecture.getCourse = {}", lecture.getCourse().getCourseName());
+                    log.info("lecture.time&location.size = {}", lecture.getLectureScheduleList().size());
+                    return LectureResponseDto.builder()
+                            .lectureId(lecture.getId())
+                            .semester(lecture.getSemester())
+                            .professor(UserResponseDto.builder()
+                                    .role(lecture.getProfessor().getRole())
+                                    .name(lecture.getProfessor().getName())
+                                    .code(lecture.getProfessor().getCode())
+                                    .phoneNumber(lecture.getProfessor().getPhoneNumber())
+                                    .createdAt(lecture.getProfessor().getCreatedAt())
+                                    .build())
+                            .lectureStatus(lecture.getLectureStatus())
+                            .year(lecture.getYear().getValue())
+                            .sizeLimit(lecture.getSizeLimit())
+                            .createdAt(lecture.getCreatedAt())
+                            .courseResponseDto(CourseResponseDto.builder()
+                                    .courseId(lecture.getCourse().getId())
+                                    .courseName(lecture.getCourse().getCourseName())
+                                    .courseNumber(lecture.getCourse().getCourseNumber())
+                                    .score(lecture.getCourse().getScore())
+                                    .createdAt(lecture.getCourse().getCreatedAt())
+                                    .build())
+                            .lectureTimeAndLocation(
+                                    lecture.getLectureScheduleList().stream()
+                                            .collect(Collectors.toMap(
+                                                    schedule -> schedule.getClassTime().getKey(),      // key
+                                                    schedule -> schedule.getLectureLocation().getId()  // value
+                                            ))
+                            )
+                            .build();
+                }
+                ).toList();
         return result;
     }
 

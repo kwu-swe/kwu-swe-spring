@@ -7,6 +7,9 @@ import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.service.LectureCommandService;
 import com.kwu.swe.domain.lecture.service.LectureQueryService;
 import com.kwu.swe.domain.user.dto.UserResponseDto;
+import com.kwu.swe.domain.user.entity.Grade;
+import com.kwu.swe.domain.user.service.UserCommandService;
+import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class LectureApiController {
 
     private final LectureCommandService lectureCommandService;
     private final LectureQueryService lectureQueryService;
+    private final UserCommandService userCommandService;
 
     @PostMapping
     public ApiResponseDto<Long> registerLecture(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
@@ -54,6 +58,21 @@ public class LectureApiController {
                 lectureCommandService.registerCourse(
                         userDetails.getUsername(),
                         lectureId));
+    }
+
+    @PostMapping("/{lectureId}/students/{studentId}")
+    public ApiResponseDto<Long> assignGrade(@PathVariable Long lectureId,
+                                            @PathVariable Long studentId,
+                                            @RequestParam String grade,
+                                            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
+        return ApiResponseDto.onSuccess(
+                userCommandService.assignGrade(
+                        userDetails.getUsername(),
+                        studentId,
+                        lectureId,
+                        EnumConvertUtil.convert(Grade.class, grade)
+                )
+        );
     }
 
 //    @PostMapping("/{lectureId}/assistants/{assistantCode}")

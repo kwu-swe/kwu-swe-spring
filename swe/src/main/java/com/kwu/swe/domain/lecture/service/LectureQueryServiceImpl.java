@@ -2,6 +2,7 @@ package com.kwu.swe.domain.lecture.service;
 
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.repository.LectureRepository;
+import com.kwu.swe.domain.user.entity.Grade;
 import com.kwu.swe.domain.user.entity.LectureStudent;
 import com.kwu.swe.domain.user.entity.User;
 import com.kwu.swe.domain.user.repository.LectureStudentRepository;
@@ -38,5 +39,28 @@ public class LectureQueryServiceImpl implements LectureQueryService{
         return lectureStudents.stream()
                 .map(LectureStudent::getLecture)
                 .toList();
+    }
+
+    @Override
+    public List<LectureStudent> getGradesOfLecture(String code, Long lectureId) {
+        User user = userRepository.findUserByCode(code)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_NOT_FOUND));
+
+        if (!lecture.getProfessor().getId().equals(user.getId())) {
+            throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_PROFESSOR);
+        }
+        return lectureStudentRepository.findByLectureProfessorId(lecture.getProfessor().getId());
+    }
+
+    @Override
+    public LectureStudent getStudentGrade(String code, Long lectureId) {
+        User user = userRepository.findUserByCode(code)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        return lectureStudentRepository
+                .findByStudentIdAndLectureId(user.getId(), lectureId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_STUDENT_NOT_FOUND));
     }
 }

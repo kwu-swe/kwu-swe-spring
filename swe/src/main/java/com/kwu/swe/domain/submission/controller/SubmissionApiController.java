@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/submissions")
@@ -40,14 +41,14 @@ public class SubmissionApiController {
             @PathVariable Long assignmentId,
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) throws IOException {  // IOException을 처리
 
-        Submission submittedSubmission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
+        Optional<Submission> submission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
 
         // Submission -> SubmissionResponseDto로 변환
         SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()
-                .submissionId(submittedSubmission.getId())
-                .title(submittedSubmission.getTitle())
-                .content(submittedSubmission.getContent())
-                .encodedFiles(submittedSubmission.getFiles().stream()
+                .submissionId(submission.get().getId())
+                .title(submission.get().getTitle())
+                .content(submission.get().getContent())
+                .encodedFiles(submission.get().getFiles().stream()
                         .map(submissionFile -> submissionFile.getEncodedURL())
                         .toList())
                 .build();

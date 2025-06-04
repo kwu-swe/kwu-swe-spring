@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -73,17 +74,22 @@ public class AssignmentApiController {
         // assignmentId에 해당하는 Assignment 조회
         Assignment assignment = assignmentQueryService.findByAssignmentId(assignmentId);
 
-        Submission submittedSubmission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
+        Optional<Submission> submission = submissionQueryService
+                .findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
+        SubmitAssignmentResponseDto submissionResponseDto = null;
+
+        if (submission.isPresent()) {
+            submissionResponseDto = SubmitAssignmentResponseDto.builder()
+                    .submissionId(submission.get().getId())
+                    .title(submission.get().getTitle())
+                    .content(submission.get().getContent())
+                    .encodedFiles(submission.get().getFiles().stream()
+                            .map(submissionFile -> submissionFile.getEncodedURL())
+                            .toList())
+                    .build();
+        }
 
         // Submission -> SubmissionResponseDto로 변환
-        SubmitAssignmentResponseDto submissionResponseDto = SubmitAssignmentResponseDto.builder()
-                .submissionId(submittedSubmission.getId())
-                .title(submittedSubmission.getTitle())
-                .content(submittedSubmission.getContent())
-                .encodedFiles(submittedSubmission.getFiles().stream()
-                        .map(submissionFile -> submissionFile.getEncodedURL())
-                        .toList())
-                .build();
 
         AssignmentWithSubmissionResponseDto responseDto = AssignmentWithSubmissionResponseDto.builder()
                 .assignmentId(assignment.getId())

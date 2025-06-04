@@ -53,7 +53,8 @@ public enum ErrorStatus implements BaseCode{
     ANNOUNCEMENT_NOT_FOUND(NOT_FOUND, 4300, "해당 공지사항은 찾을 수 없습니다."),
     MATERIAL_NOT_FOUND(NOT_FOUND, 4400, "해당 강의 자료는 찾을 수 없습니다."),
 
-    USER_NOT_ENROLLED_IN_LECTURE(NOT_FOUND, 4400, "해당 유저는 등록되지 않은 유저입니다.");
+    USER_NOT_ENROLLED_IN_LECTURE(NOT_FOUND, 4400, "해당 유저는 등록되지 않은 유저입니다."),
+    LECTURE_STUDENT_NOT_FOUND(NOT_FOUND, 4401, "해당 학생은 강의를 수강하고 있지 않습니다.");
 
 
 

@@ -17,7 +17,7 @@ public class PlanResponseDto {
 
     private Long id;
     private int sizeLimit;
-    private Year year;
+    private int year;
     private LectureStatus lectureStatus;
     private Semester semester;
 
@@ -26,4 +26,6 @@ public class PlanResponseDto {
 
     private Long professorId;
     private String professorName;
+    private String goal;
+    private String description;
 }

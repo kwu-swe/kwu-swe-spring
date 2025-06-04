@@ -34,13 +34,15 @@ public class LecturePlanQueryServiceImpl implements LecturePlanQueryService {
         PlanResponseDto responseDto = PlanResponseDto.builder()
                 .id(lecturePlan.getId())
                 .sizeLimit(lecture.getSizeLimit())
-                .year(lecture.getYear())
+                .year(lecture.getYear().getValue())
                 .lectureStatus(lecture.getLectureStatus())
                 .semester(lecture.getSemester())
                 .courseId(lecture.getCourse().getId())
                 .courseName(lecture.getCourse().getCourseName())
                 .professorId(lecture.getProfessor().getId())
                 .professorName(lecture.getProfessor().getName())
+                .goal(lecturePlan.getGoal())
+                .description(lecturePlan.getDescription())
                 .build();
 
         return responseDto;

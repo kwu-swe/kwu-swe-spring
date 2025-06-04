@@ -88,6 +88,7 @@ public class LectureApiController {
                 .getGradesOfLecture(userDetails.getUsername(), lectureId);
         List<GradeResponseDto> result = gradesOfLecture.stream()
                 .map(lectureStudent -> GradeResponseDto.builder()
+                        .studentId(lectureStudent.getStudent().getId())
                         .grade(lectureStudent.getGrade())
                         .name(lectureStudent.getStudent().getName())
                         .code(lectureStudent.getStudent().getCode())

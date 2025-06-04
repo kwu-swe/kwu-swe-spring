@@ -16,6 +16,8 @@ public enum Grade implements KeyedEnum {
     D_PLUS("D_PLUS"),
     D("D"),
     F("F"),
+    P("P"),
+    NP("NP"),
     IN_PROGRESS("IN_PROGRESS");
 
     private final String key;

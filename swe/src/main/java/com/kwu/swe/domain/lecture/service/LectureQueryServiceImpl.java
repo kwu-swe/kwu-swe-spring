@@ -57,7 +57,7 @@ public class LectureQueryServiceImpl implements LectureQueryService{
         if (!lecture.getProfessor().getId().equals(user.getId())) {
             throw new GeneralException(ErrorStatus.ONLY_TOUCHED_BY_PROFESSOR);
         }
-        return lectureStudentRepository.findByLectureProfessorId(lecture.getProfessor().getId());
+        return lectureStudentRepository.findByLecture(lecture);
     }
 
     @Override

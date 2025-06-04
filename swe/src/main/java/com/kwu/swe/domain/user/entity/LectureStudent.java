@@ -11,6 +11,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "lecture_student", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"student", "lecture"})
+})
 public class LectureStudent extends BaseTimeEntity {
 
     @Id

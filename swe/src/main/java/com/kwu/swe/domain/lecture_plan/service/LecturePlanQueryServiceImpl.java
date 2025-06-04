@@ -25,7 +25,7 @@ public class LecturePlanQueryServiceImpl implements LecturePlanQueryService {
     @Override
     public PlanResponseDto getPlanByLectureId(Long lectureId) {
 
-        LecturePlan lecturePlan = lecturePlanRepository.findById(lectureId)
+        LecturePlan lecturePlan = lecturePlanRepository.findByLectureId(lectureId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.LECTURE_PLAN_NOT_FOUND));
 
         Lecture lecture = lectureRepository.findById(lectureId)

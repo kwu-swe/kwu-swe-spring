@@ -92,7 +92,8 @@ public class SecurityConfig {
                 antMatcher("/health_check"),
                 antMatcher("/actuator/**"),
                 antMatcher("/welcome"),
-                antMatcher("/v1/api/access/**")
+                antMatcher("/v1/api/access/**"),
+                antMatcher("/api/tests/npe")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }

@@ -22,13 +22,12 @@ public class SubmissionQueryServiceImpl implements SubmissionQueryService {
     private final UserRepository userRepository;
 
     @Override
-    public Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, String code) {
+    public Optional<Submission> findSubmissionByAssignmentIdAndUserId(Long assignmentId, String code) {
 
         // code로부터 사용자 조회
         User user = userRepository.findUserByCode(code)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        return submissionRepository.findSubmissionByAssignmentIdAndUserId(assignmentId, user.getId())
-                .orElseThrow(() -> new GeneralException(ErrorStatus.SUBMISSION_NOT_FOUND));
+        return submissionRepository.findSubmissionByAssignmentIdAndUserId(assignmentId, user.getId());
     }
 }

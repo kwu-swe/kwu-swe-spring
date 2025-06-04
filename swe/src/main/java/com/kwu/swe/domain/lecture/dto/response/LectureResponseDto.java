@@ -4,6 +4,7 @@ import com.kwu.swe.domain.course.dto.response.CourseResponseDto;
 import com.kwu.swe.domain.lecture.entity.LectureStatus;
 import com.kwu.swe.domain.lecture.entity.Semester;
 import com.kwu.swe.domain.user.dto.UserResponseDto;
+import com.kwu.swe.domain.user.entity.Grade;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class LectureResponseDto {
     private Long lectureId;
     private int sizeLimit;
     private int year;
+    private Grade grade;
     private LectureStatus lectureStatus;
     private Semester semester;
     private LocalDateTime createdAt;

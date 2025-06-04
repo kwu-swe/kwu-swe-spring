@@ -6,8 +6,10 @@ import com.kwu.swe.domain.lecture.dto.response.LectureResponseDto;
 import com.kwu.swe.domain.lecture.entity.Lecture;
 import com.kwu.swe.domain.lecture.service.LectureCommandService;
 import com.kwu.swe.domain.lecture.service.LectureQueryService;
+import com.kwu.swe.domain.user.dto.GradeResponseDto;
 import com.kwu.swe.domain.user.dto.UserResponseDto;
 import com.kwu.swe.domain.user.entity.Grade;
+import com.kwu.swe.domain.user.entity.LectureStudent;
 import com.kwu.swe.domain.user.service.UserCommandService;
 import com.kwu.swe.global.util.EnumConvertUtil;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
@@ -48,7 +50,7 @@ public class LectureApiController {
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
     ) {
         List<Lecture> studentLectures = lectureQueryService.getStudentLectures(userDetails.getUsername());
-        return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures));
+        return ApiResponseDto.onSuccess(getLectureResponseDtos(studentLectures, userDetails.getUsername()));
     }
 
     @PostMapping("/{lectureId}")
@@ -60,7 +62,7 @@ public class LectureApiController {
                         lectureId));
     }
 
-    @PostMapping("/{lectureId}/students/{studentId}")
+    @PostMapping("/{lectureId}/students/{studentId}/grades")
     public ApiResponseDto<Long> assignGrade(@PathVariable Long lectureId,
                                             @PathVariable Long studentId,
                                             @RequestParam String grade,
@@ -74,6 +76,24 @@ public class LectureApiController {
                 )
         );
     }
+
+    @GetMapping("/{lectureId}/grades")
+    public ApiResponseDto<List<GradeResponseDto>> getGradesOfLecture(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long lectureId) {
+        List<LectureStudent> gradesOfLecture = lectureQueryService
+                .getGradesOfLecture(userDetails.getUsername(), lectureId);
+        List<GradeResponseDto> result = gradesOfLecture.stream()
+                .map(lectureStudent -> GradeResponseDto.builder()
+                        .grade(lectureStudent.getGrade())
+                        .name(lectureStudent.getStudent().getName())
+                        .code(lectureStudent.getStudent().getCode())
+                        .build())
+                .toList();
+
+        return ApiResponseDto.onSuccess(result);
+    }
+
 
 //    @PostMapping("/{lectureId}/assistants/{assistantCode}")
 //    public ApiResponseDto<Long> registerAssistant(@PathVariable Long lectureId,
@@ -101,6 +121,41 @@ public class LectureApiController {
                                 .createdAt(lecture.getProfessor().getCreatedAt())
                                 .build())
                         .lectureStatus(lecture.getLectureStatus())
+                        .year(lecture.getYear().getValue())
+                        .sizeLimit(lecture.getSizeLimit())
+                        .createdAt(lecture.getCreatedAt())
+                        .courseResponseDto(CourseResponseDto.builder()
+                                .courseId(lecture.getCourse().getId())
+                                .courseName(lecture.getCourse().getCourseName())
+                                .courseNumber(lecture.getCourse().getCourseNumber())
+                                .score(lecture.getCourse().getScore())
+                                .createdAt(lecture.getCourse().getCreatedAt())
+                                .build())
+                        .lectureTimeAndLocation(
+                                lecture.getLectureScheduleList().stream()
+                                        .collect(Collectors.toMap(
+                                                schedule -> schedule.getClassTime().getKey(),      // key
+                                                schedule -> schedule.getLectureLocation().getId()  // value
+                                        ))
+                        )
+                        .build()).toList();
+        return result;
+    }
+
+    private List<LectureResponseDto> getLectureResponseDtos(List<Lecture> allLectures, String code) {
+        List<LectureResponseDto> result = allLectures.stream()
+                .map(lecture -> LectureResponseDto.builder()
+                        .lectureId(lecture.getId())
+                        .semester(lecture.getSemester())
+                        .professor(UserResponseDto.builder()
+                                .role(lecture.getProfessor().getRole())
+                                .name(lecture.getProfessor().getName())
+                                .code(lecture.getProfessor().getCode())
+                                .phoneNumber(lecture.getProfessor().getPhoneNumber())
+                                .createdAt(lecture.getProfessor().getCreatedAt())
+                                .build())
+                        .lectureStatus(lecture.getLectureStatus())
+                        .grade(lectureQueryService.getStudentGrade(code, lecture.getId()).getGrade())
                         .year(lecture.getYear().getValue())
                         .sizeLimit(lecture.getSizeLimit())
                         .createdAt(lecture.getCreatedAt())

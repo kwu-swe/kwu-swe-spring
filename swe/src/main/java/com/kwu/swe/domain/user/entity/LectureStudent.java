@@ -30,4 +30,8 @@ public class LectureStudent extends BaseTimeEntity {
     @Column(name = "grade", nullable = false)
     @Builder.Default
     private Grade grade = Grade.IN_PROGRESS;
+
+    public void assignGrade(Grade grade) {
+        this.grade = grade;
+    }
 }

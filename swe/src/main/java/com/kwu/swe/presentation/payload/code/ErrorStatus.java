@@ -35,6 +35,7 @@ public enum ErrorStatus implements BaseCode{
 
     //강의 관련 오류(4100 ~ 4149)
     LECTURE_NOT_FOUND(NOT_FOUND, 4100, "해당 강의를 찾을 수 없습니다."),
+    LECTURE_PLAN_NOT_FOUND(NOT_FOUND, 4100, "해당 강의계획서를 찾을 수 없습니다."),
 
     //수업 관련 오류(4150 ~ 4199)
     COURSE_NOT_FOUND(NOT_FOUND, 4150, "해당 수업을 찾을 수 없습니다."),

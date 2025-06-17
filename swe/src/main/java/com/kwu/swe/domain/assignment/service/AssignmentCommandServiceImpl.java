@@ -42,15 +42,15 @@ public class AssignmentCommandServiceImpl implements AssignmentCommandService {
             throw new GeneralException(ErrorStatus.NOT_MATCH_PROFESSOR);
         }
 
-        // 현재 날짜를 기준으로 마감일 계산
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime dueDate = currentDate.plusDays(assignmentRequestDto.getDueDateAfterDays());
+        if (assignmentRequestDto.getDueDate().isBefore(LocalDateTime.now())) {
+            throw new GeneralException(ErrorStatus.DUE_DATE_WRONG);
+        }
 
         // AssignmentDto로부터 Assignment 엔티티를 생성
         Assignment assignment = Assignment.builder()
                 .title(assignmentRequestDto.getTitle())
                 .content(assignmentRequestDto.getContent())
-                .dueDate(dueDate)
+                .dueDate(assignmentRequestDto.getDueDate())
                 .lecture(lecture)
                 .build();
 

@@ -6,7 +6,9 @@ import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
 import com.kwu.swe.domain.submission.entity.Submission;
 import com.kwu.swe.domain.submission.service.SubmissionCommandService;
 import com.kwu.swe.domain.submission.service.SubmissionQueryService;
+import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.dto.ApiResponseDto;
+import com.kwu.swe.presentation.payload.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,6 +44,8 @@ public class SubmissionApiController {
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) throws IOException {  // IOException을 처리
 
         Optional<Submission> submission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, userDetails.getUsername());
+
+        if(submission.isEmpty()) throw new GeneralException(ErrorStatus.SUBMISSION_NOT_FOUND);
 
         // Submission -> SubmissionResponseDto로 변환
         SubmitAssignmentResponseDto responseDto = SubmitAssignmentResponseDto.builder()

@@ -55,6 +55,7 @@ public class AssignmentApiController {
                         .assignmentId(assignment.getId())
                         .title(assignment.getTitle())
                         .dueDate(assignment.getDueDate())
+                        .createdAt(assignment.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
 

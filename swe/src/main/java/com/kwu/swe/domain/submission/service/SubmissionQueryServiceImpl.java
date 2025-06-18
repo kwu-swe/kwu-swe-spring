@@ -63,4 +63,11 @@ public class SubmissionQueryServiceImpl implements SubmissionQueryService {
                     .build();
         }).toList();
     }
+
+    @Override
+    public Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, Long studentId) {
+        Submission submission = submissionRepository.findSubmissionByAssignmentIdAndUserId(assignmentId, studentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ASSIGNMENT_NOT_FOUND));
+        return submission;
+    }
 }

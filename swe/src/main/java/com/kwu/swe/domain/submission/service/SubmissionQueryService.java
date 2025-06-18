@@ -13,4 +13,7 @@ public interface SubmissionQueryService {
     Optional<Submission> findSubmissionByAssignmentIdAndUserId(Long assignmentId, String code);
 
     List<SubmissionProfessorResponseDto> findAllStatusOfAssignment(Long assignment, String code);
+
+    Submission findSubmissionByAssignmentIdAndUserId(Long assignmentId, Long studentId);
+
 }

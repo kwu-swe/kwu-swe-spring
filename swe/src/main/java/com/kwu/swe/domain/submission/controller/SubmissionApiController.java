@@ -1,7 +1,9 @@
 package com.kwu.swe.domain.submission.controller;
 
+import com.kwu.swe.domain.assignment.dto.AssignmentWithSubmissionResponseDto;
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
 import com.kwu.swe.domain.submission.dto.SubmissionProfessorResponseDto;
+import com.kwu.swe.domain.submission.dto.SubmissionResponseDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
 import com.kwu.swe.domain.submission.entity.Submission;
@@ -88,6 +90,29 @@ public class SubmissionApiController {
     ) {
         return ApiResponseDto.onSuccess(
                 submissionQueryService.findAllStatusOfAssignment(assignmentId, userDetails.getUsername())
+        );
+    }
+
+    @GetMapping("assignments/{assignmentId}/professor/{studentId}")
+    public ApiResponseDto<SubmissionResponseDto> getSubmissionOfStudent(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long assignmentId,
+            @PathVariable Long studentId
+    ) {
+
+        Submission submission = submissionQueryService.findSubmissionByAssignmentIdAndUserId(assignmentId, studentId);
+        List<String> urls = submission.getFiles().stream().map(submissionFile -> submissionFile.getEncodedURL())
+                .toList();
+        SubmissionResponseDto result = SubmissionResponseDto.builder()
+                .submissionId(submission.getId())
+                .content(submission.getContent())
+                .title(submission.getTitle())
+                .encodedFiles(
+                        urls
+                )
+                .build();
+        return ApiResponseDto.onSuccess(
+                result
         );
     }
 }

@@ -15,6 +15,7 @@ import com.kwu.swe.domain.user.repository.UserRepository;
 import com.kwu.swe.presentation.payload.code.ErrorStatus;
 import com.kwu.swe.presentation.payload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -55,7 +57,10 @@ public class SubmissionQueryServiceImpl implements SubmissionQueryService {
 
         List<LectureStudent> byLecture = lectureStudentRepository.findByLecture(assignment.getLecture());
         return byLecture.stream().map(lectureStudent -> {
-            boolean result = submissionRepository.existsByUserId(lectureStudent.getStudent().getId());
+            boolean result = submissionRepository.existsByUserIdAndAssignmentId(
+                    lectureStudent.getStudent().getId(),
+                    assignmentId);
+            log.info("result : {}", result);
             return SubmissionProfessorResponseDto.builder()
                     .submitStatus(result ? SubmitStatus.SUBMITTED : SubmitStatus.NOT_SUBMITTED)
                     .studentId(lectureStudent.getStudent().getId())

@@ -16,7 +16,7 @@ public class LectureLocationCommandServiceImpl implements LectureLocationCommand
     @Override
     public Long registerLocation(RegisterLocationRequestDto dto) {
         LectureLocation newLocation = LectureLocation.builder()
-                .location(dto.getLocation())
+                .location(dto.getLocationName())
                 .sizeLimit(dto.getSizeLimit())
                 .build();
         return lectureLocationRepository.save(newLocation).getId();

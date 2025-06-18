@@ -1,6 +1,7 @@
 package com.kwu.swe.domain.submission.controller;
 
 import com.kwu.swe.domain.assignment.repository.AssignmentRepository;
+import com.kwu.swe.domain.submission.dto.SubmissionProfessorResponseDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentRequestDto;
 import com.kwu.swe.domain.submission.dto.SubmitAssignmentResponseDto;
 import com.kwu.swe.domain.submission.entity.Submission;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -77,5 +79,15 @@ public class SubmissionApiController {
 
         submissionCommandService.deleteSubmission(submissionId);
         return ApiResponseDto.onSuccess(null);
+    }
+
+    @GetMapping("/assignments/{assignmentId}/professor")
+    public ApiResponseDto<List<SubmissionProfessorResponseDto>> getListOfSubmission(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long assignmentId
+    ) {
+        return ApiResponseDto.onSuccess(
+                submissionQueryService.findAllStatusOfAssignment(assignmentId, userDetails.getUsername())
+        );
     }
 }

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterLocationRequestDto {
 
-    private String location;
+    private String locationName;
     private int sizeLimit;
 }
